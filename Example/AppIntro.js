@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
   },
   dotStyle: {
@@ -82,20 +82,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Arial',
   },
   full: {
-    flex: 1,
+    height: 80,
     width: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  // leftBtn: {
-  //   opacity: this.state.skipFadeOpacity,
-  //   transform: [{
-  //     translateY: this.state.skipFadeOpacity.interpolate({
-  //       inputRange: [0, 1],
-  //       outputRange: [150, 0],
-  //     }),
-  //   }],
-  // },
 });
 
 export default class AppIntro extends Component {
@@ -103,6 +94,8 @@ export default class AppIntro extends Component {
     super(props);
     this.state = {
       skipFadeOpacity: new Animated.Value(1),
+      doneFadeOpacity: new Animated.Value(0),
+      nextOpacity: new Animated.Value(1),
     };
   }
 
@@ -110,9 +103,23 @@ export default class AppIntro extends Component {
     this.props.onNextBtnClick();
   }
 
+  setDoneBtnOpacity = (value) => {
+    Animated.timing(
+      this.state.doneFadeOpacity,
+      { toValue: value },
+    ).start();
+  }
+
   setSkipBtnOpacity = (value) => {
     Animated.timing(
       this.state.skipFadeOpacity,
+      { toValue: value },
+    ).start();
+  }
+
+  setNextOpacity = (value) => {
+    Animated.timing(
+      this.state.nextOpacity,
       { toValue: value },
     ).start();
   }
@@ -134,15 +141,19 @@ export default class AppIntro extends Component {
         React.cloneElement(Dot, { key: i })
       );
     }
-    let doneBtn;
+    let isDoneBtnShow;
     let isSkipBtnShow;
-    const nextBtn = <Text style={[styles.nextButtonText, { color: rightTextColor }]}>›</Text>;
     if (index === total - 1) {
-      doneBtn = <Text style={[styles.text, { color: rightTextColor }]}>Done</Text>;
+      this.setDoneBtnOpacity(1);
       this.setSkipBtnOpacity(0);
+      this.setNextOpacity(0);
+      isDoneBtnShow = true;
       isSkipBtnShow = false;
     } else {
+      this.setDoneBtnOpacity(0);
       this.setSkipBtnOpacity(1);
+      this.setNextOpacity(1);
+      isDoneBtnShow = false;
       isSkipBtnShow = true;
     }
     return (
@@ -152,7 +163,7 @@ export default class AppIntro extends Component {
           transform: [{
             translateX: this.state.skipFadeOpacity.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 20],
+              outputRange: [0, 15],
             }),
           }],
         }]}
@@ -167,14 +178,29 @@ export default class AppIntro extends Component {
         <View style={styles.dotContainer}>
           {dots}
         </View>
-        <Animated.View style={styles.btnContainer}>
-          <TouchableOpacity
-            style={styles.full}
-            onPress={ doneBtn ? this.props.onDoneBtnClick : this.onNextBtnClick}
+        <View style={styles.btnContainer}>
+          <Animated.View style={[styles.full, { height: 0 }, {
+            opacity: this.state.doneFadeOpacity,
+            transform: [{
+              translateX: this.state.skipFadeOpacity.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 20],
+              }),
+            }],
+          }]}
           >
-            {doneBtn || nextBtn}
-          </TouchableOpacity>
-        </Animated.View>
+            <View style={styles.full}>
+              <Text style={[styles.text, { color: rightTextColor, paddingRight: 30 }]}>Done</Text>
+            </View>
+          </Animated.View>
+          <Animated.View style={[styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
+            <TouchableOpacity style={styles.full}
+              onPress={ isDoneBtnShow ? this.props.onDoneBtnClick : this.onNextBtnClick}
+            >
+             <Text style={[styles.nextButtonText, { color: rightTextColor }]}>›</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
       </View>
     );
   }
