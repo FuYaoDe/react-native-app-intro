@@ -52,7 +52,7 @@ class Example extends Component {
     Alert.alert('Done');
   }
   nextBtnHendle = () => {
-    Alert.alert('Next');
+    // Alert.alert('Next');
   }
 
   render() {
