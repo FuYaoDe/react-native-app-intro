@@ -10,6 +10,7 @@ import React, {
   StyleSheet,
   Text,
   View,
+  Alert,
 } from 'react-native';
 import AppIntro from './AppIntro';
 
@@ -42,9 +43,25 @@ const styles = StyleSheet.create({
 });
 
 class Example extends Component {
+
+
+  onSkipBtnHandle = () => {
+    Alert.alert('Skip');
+  }
+  doneBtnHandle = () => {
+    Alert.alert('Done');
+  }
+  nextBtnHendle = () => {
+    Alert.alert('Next');
+  }
+
   render() {
     return (
-      <AppIntro />
+      <AppIntro
+        onNextBtnClick={this.nextBtnHendle}
+        onDoneBtnClick={this.doneBtnHandle}
+        onSkipBtnClick={this.onSkipBtnHandle}
+      />
     );
   }
 }

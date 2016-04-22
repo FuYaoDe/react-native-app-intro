@@ -4,7 +4,8 @@ import React, {
   View,
   PropTypes,
   TouchableOpacity,
-  Alert,
+  Component,
+  Animated,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 
@@ -82,25 +83,49 @@ const styles = StyleSheet.create({
   },
   full: {
     flex: 1,
+    width: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  // leftBtn: {
+  //   opacity: this.state.skipFadeOpacity,
+  //   transform: [{
+  //     translateY: this.state.skipFadeOpacity.interpolate({
+  //       inputRange: [0, 1],
+  //       outputRange: [150, 0],
+  //     }),
+  //   }],
+  // },
 });
 
-export default function AppIntro(props) {
-
-  function onSkipBtnClick(){
-    Alert.alert("!!!!!!!!!!!!");
+export default class AppIntro extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      skipFadeOpacity: new Animated.Value(1),
+    };
   }
 
-  function renderPagination(index, total, context) {
-    console.log("!!!!", index, total, context);
+  onNextBtnClick = () => {
+    this.props.onNextBtnClick();
+  }
+
+  setSkipBtnOpacity = (value) => {
+    Animated.timing(
+      this.state.skipFadeOpacity,
+      { toValue: value },
+    ).start();
+  }
+
+  renderPagination = (index, total, context) => {
+    const { activeDotColor, dotColor, rightTextColor } = this.props;
+    this.props.onSlideChange(index, total);
     const ActiveDot = (
       <View
-        style={[styles.activeDotStyle, { backgroundColor: props.activeDotColor }]}
+        style={[styles.activeDotStyle, { backgroundColor: activeDotColor }]}
       />
     );
-    const Dot = <View style={[styles.dotStyle, { backgroundColor: props.dotColor }]} />;
+    const Dot = <View style={[styles.dotStyle, { backgroundColor: dotColor }]} />;
     let dots = [];
     for (let i = 0; i < total; i++) {
       dots.push(i === index ?
@@ -110,48 +135,72 @@ export default function AppIntro(props) {
       );
     }
     let doneBtn;
-    let skipBtn;
-    const nextBtn = <Text style={[styles.nextButtonText, { color: props.rightTextColor }]}>›</Text>;
+    let isSkipBtnShow;
+    const nextBtn = <Text style={[styles.nextButtonText, { color: rightTextColor }]}>›</Text>;
     if (index === total - 1) {
-      doneBtn = <Text style={[styles.text, { color: props.rightTextColor }]}>Done</Text>;
+      doneBtn = <Text style={[styles.text, { color: rightTextColor }]}>Done</Text>;
+      this.setSkipBtnOpacity(0);
+      isSkipBtnShow = false;
     } else {
-      skipBtn = (
-        <TouchableOpacity style={styles.full} onPress={onSkipBtnClick}>
-          <Text style={[styles.text, { color: props.rightTextColor }]}>Skip</Text>
-        </TouchableOpacity>
-      );
+      this.setSkipBtnOpacity(1);
+      isSkipBtnShow = true;
     }
     return (
       <View style={styles.paginationContainer}>
-        <View style={styles.btnContainer}>
-          {skipBtn}
-        </View>
+        <Animated.View style={[styles.btnContainer, {
+          opacity: this.state.skipFadeOpacity,
+          transform: [{
+            translateX: this.state.skipFadeOpacity.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 20],
+            }),
+          }],
+        }]}
+        >
+          <TouchableOpacity
+            style={styles.full}
+            onPress={isSkipBtnShow ? this.props.onSkipBtnClick : null}
+          >
+            <Text style={[styles.text, { color: rightTextColor }]}>Skip</Text>
+          </TouchableOpacity>
+        </Animated.View>
         <View style={styles.dotContainer}>
           {dots}
         </View>
-        <TouchableOpacity style={styles.btnContainer}>
-          {doneBtn || nextBtn}
-        </TouchableOpacity>
+        <Animated.View style={styles.btnContainer}>
+          <TouchableOpacity
+            style={styles.full}
+            onPress={ doneBtn ? this.props.onDoneBtnClick : this.onNextBtnClick}
+          >
+            {doneBtn || nextBtn}
+          </TouchableOpacity>
+        </Animated.View>
       </View>
     );
   }
 
-  return (
-    <Swiper style={styles.wrapper}
-      loop={false}
-      renderPagination={renderPagination}
-    >
-      <View style={styles.slide1}>
-        <Text style={styles.text}>Hello Swiper</Text>
-      </View>
-      <View style={styles.slide2} showsPagination={false}>
-        <Text style={styles.text}>Beautiful</Text>
-      </View>
-      <View style={styles.slide3}>
-        <Text style={styles.text}>And simple</Text>
-      </View>
-    </Swiper>
-  );
+  onScrollBeginDragHandle = (e, state, context) => {
+    console.log(state, context.state);
+  }
+  render() {
+    return (
+      <Swiper style={styles.wrapper}
+        loop={false}
+        renderPagination={this.renderPagination}
+        onScrollBeginDrag={this.onScrollBeginDragHandle}
+      >
+        <View style={styles.slide1}>
+          <Text style={styles.text}>Hello Swiper</Text>
+        </View>
+        <View style={styles.slide2} showsPagination={false}>
+          <Text style={styles.text}>Beautiful</Text>
+        </View>
+        <View style={styles.slide3}>
+          <Text style={styles.text}>And simple</Text>
+        </View>
+      </Swiper>
+    );
+  }
 }
 
 AppIntro.propTypes = {
@@ -159,6 +208,10 @@ AppIntro.propTypes = {
   activeDotColor: PropTypes.string,
   rightTextColor: PropTypes.string,
   leftTextColor: PropTypes.string,
+  onSlideChange: PropTypes.func,
+  onSkipBtnClick: PropTypes.func,
+  onDoneBtnClick: PropTypes.func,
+  onNextBtnClick: PropTypes.func,
 };
 
 AppIntro.defaultProps = {
@@ -166,4 +219,8 @@ AppIntro.defaultProps = {
   activeDotColor: '#fff',
   rightTextColor: '#fff',
   leftTextColor: '#fff',
+  onSlideChange: () => {},
+  onSkipBtnClick: () => {},
+  onDoneBtnClick: () => {},
+  onNextBtnClick: () => {},
 };
