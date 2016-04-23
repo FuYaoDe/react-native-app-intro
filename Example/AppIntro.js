@@ -214,15 +214,16 @@ export default class AppIntro extends Component {
     );
   }
 
-  onScrollBeginDragHandle = (e, state, context) => {
-    console.log(state, context.state);
+  onScroll = (e) => {
+    console.log("!!!!!!!!!!!!!!!!",e);
   }
+
   render() {
     return (
       <Swiper style={styles.wrapper}
         loop={false}
         renderPagination={this.renderPagination}
-        onScrollBeginDrag={this.onScrollBeginDragHandle}
+        onScroll={this.onScroll}
       >
         <View style={styles.slide1}>
           <Text style={styles.text}>Hello Swiper</Text>
