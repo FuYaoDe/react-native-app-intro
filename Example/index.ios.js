@@ -55,7 +55,7 @@ class Example extends Component {
     // Alert.alert('Next');
   }
   onSlideChangeHandle = (index, total) => {
-    
+
   }
 
   render() {

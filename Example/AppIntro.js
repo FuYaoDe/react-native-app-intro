@@ -96,7 +96,19 @@ export default class AppIntro extends Component {
       skipFadeOpacity: new Animated.Value(1),
       doneFadeOpacity: new Animated.Value(0),
       nextOpacity: new Animated.Value(1),
+      parallax: new Animated.Value(0),
+      parallaText: new Animated.Value(0),
     };
+  }
+
+  componentWillMount() {
+    // this.state.parallax.setValue({x: 375, y: 0});
+    // this.setState({
+    //   parallax: {
+    //     x: 375,
+    //     y: 0,
+    //   },
+    // });
   }
 
   onNextBtnClick = (context) => {
@@ -214,23 +226,99 @@ export default class AppIntro extends Component {
     );
   }
 
-  onScroll = (e) => {
-    console.log("!!!!!!!!!!!!!!!!",e);
+  onScroll = (event) => {
+    console.log("!!!!!!!!!!!!!!!!",event.nativeEvent.contentOffset.x);
+    // Animated.event(
+    //   [{ nativeEvent: { contentOffset: { x: this.state.parallax } } }]
+    // );
+    Animated.event(
+      [{
+        event: {
+          nativeEvent: {
+            contentOffset: {
+              x: this.state.parallax,
+            },
+          },
+        }
+      }]
+    );
+    // this.state.parallax.setValue(event.nativeEvent.contentOffset.x);
+    // console.log(this.state.parallax);
   }
 
   render() {
+    console.log("render", this.state.parallax);
     return (
       <Swiper style={styles.wrapper}
         loop={false}
         renderPagination={this.renderPagination}
-        onScroll={this.onScroll}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: this.state.parallax }}}]
+        )}
       >
         <View style={styles.slide1}>
           <Text style={styles.text}>Hello Swiper</Text>
         </View>
-        <View style={styles.slide2} showsPagination={false}>
-          <Text style={styles.text}>Beautiful</Text>
-        </View>
+        <Animated.View style={[
+          styles.slide2,
+        ]}
+          showsPagination={false}
+        >
+        <Animated.View style={[{
+          transform: [   // Array order matters
+            {
+              translateX: this.state.parallax.interpolate({
+                inputRange: [0, 370],
+                outputRange: [375, 0],
+              }),
+            }],
+        },
+        {
+          opacity: this.state.parallax.interpolate({
+            inputRange: [0, 375], outputRange: [0, 1],
+          }),
+        },
+        ]}
+        >
+          <Text style={styles.text}>AAAAAAAAAAAAAAAAAA</Text>
+        </Animated.View>
+        <Animated.View style={[{
+          transform: [   // Array order matters
+            {
+              translateX: this.state.parallax.interpolate({
+                inputRange: [0, 370],
+                outputRange: [275, 0],
+              }),
+            }],
+        },
+        {
+          opacity: this.state.parallax.interpolate({
+            inputRange: [0, 375], outputRange: [0, 1],
+          }),
+        },
+        ]}
+        >
+          <Text style={styles.text}>AAAAAAAAAAAAAAAAAA</Text>
+        </Animated.View>
+        <Animated.View style={[{
+          transform: [   // Array order matters
+            {
+              translateX: this.state.parallax.interpolate({
+                inputRange: [0, 370],
+                outputRange: [450, 0],
+              }),
+            }],
+        },
+        {
+          opacity: this.state.parallax.interpolate({
+            inputRange: [0, 375], outputRange: [0, 1],
+          }),
+        },
+        ]}
+        >
+          <Text style={styles.text}>AAAAAAAAAAAAAAAAAA</Text>
+        </Animated.View>
+        </Animated.View>
         <View style={styles.slide3}>
           <Text style={styles.text}>And simple</Text>
         </View>
