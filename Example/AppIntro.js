@@ -6,17 +6,20 @@ import React, {
   TouchableOpacity,
   Component,
   Animated,
+  Dimensions,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
+const windowsWidth = Dimensions.get('window').width;
+const windowsHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
-  slide1: {
+  slide0: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#9DD6EB',
   },
-  slide2: {
+  slide1: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -97,7 +100,6 @@ export default class AppIntro extends Component {
       doneFadeOpacity: new Animated.Value(0),
       nextOpacity: new Animated.Value(1),
       parallax: new Animated.Value(0),
-      parallaText: new Animated.Value(0),
     };
   }
 
@@ -226,28 +228,43 @@ export default class AppIntro extends Component {
     );
   }
 
-  onScroll = (event) => {
-    console.log("!!!!!!!!!!!!!!!!",event.nativeEvent.contentOffset.x);
-    // Animated.event(
-    //   [{ nativeEvent: { contentOffset: { x: this.state.parallax } } }]
-    // );
-    Animated.event(
-      [{
-        event: {
-          nativeEvent: {
-            contentOffset: {
-              x: this.state.parallax,
-            },
-          },
-        }
-      }]
-    );
-    // this.state.parallax.setValue(event.nativeEvent.contentOffset.x);
-    // console.log(this.state.parallax);
+  renderSlidePage = (index, title) => {
+    const isFirstPage = index === 0;
+    const statRange = isFirstPage ? 0 : windowsWidth * (index - 1);
+    const endRange = isFirstPage ? windowsWidth : windowsWidth * index;
+    const startOpacity = isFirstPage ? 1 : 0;
+    const endOpacity = isFirstPage ? 1 : 1;
+    const leftPosition = isFirstPage ? 0 : windowsWidth / 3;
+    const rightPosition = isFirstPage ? -windowsWidth / 3 : 0;
+    let style = index % 2 === 0 ? styles.slide0 : styles.slide1;
+    const pageView = ( <View style={[
+        style,
+      ]}
+        showsPagination={false}
+      >
+      <Animated.View style={[{
+        transform: [   // Array order matters
+          {
+            translateX: this.state.parallax.interpolate({
+              inputRange: [statRange, endRange],
+              outputRange: [leftPosition, rightPosition],
+            }),
+          }],
+      },
+      {
+        opacity: this.state.parallax.interpolate({
+          inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
+        }),
+      },
+      ]}
+      >
+        <Text style={styles.text}>{title}</Text>
+      </Animated.View>
+    </View>);
+    return pageView
   }
 
   render() {
-    console.log("render", this.state.parallax);
     return (
       <Swiper style={styles.wrapper}
         loop={false}
@@ -256,72 +273,12 @@ export default class AppIntro extends Component {
           [{ nativeEvent: { contentOffset: { x: this.state.parallax }}}]
         )}
       >
-        <View style={styles.slide1}>
+        {/*<View style={styles.slide0}>
           <Text style={styles.text}>Hello Swiper</Text>
-        </View>
-        <Animated.View style={[
-          styles.slide2,
-        ]}
-          showsPagination={false}
-        >
-        <Animated.View style={[{
-          transform: [   // Array order matters
-            {
-              translateX: this.state.parallax.interpolate({
-                inputRange: [0, 370],
-                outputRange: [375, 0],
-              }),
-            }],
-        },
-        {
-          opacity: this.state.parallax.interpolate({
-            inputRange: [0, 375], outputRange: [0, 1],
-          }),
-        },
-        ]}
-        >
-          <Text style={styles.text}>AAAAAAAAAAAAAAAAAA</Text>
-        </Animated.View>
-        <Animated.View style={[{
-          transform: [   // Array order matters
-            {
-              translateX: this.state.parallax.interpolate({
-                inputRange: [0, 370],
-                outputRange: [275, 0],
-              }),
-            }],
-        },
-        {
-          opacity: this.state.parallax.interpolate({
-            inputRange: [0, 375], outputRange: [0, 1],
-          }),
-        },
-        ]}
-        >
-          <Text style={styles.text}>AAAAAAAAAAAAAAAAAA</Text>
-        </Animated.View>
-        <Animated.View style={[{
-          transform: [   // Array order matters
-            {
-              translateX: this.state.parallax.interpolate({
-                inputRange: [0, 370],
-                outputRange: [450, 0],
-              }),
-            }],
-        },
-        {
-          opacity: this.state.parallax.interpolate({
-            inputRange: [0, 375], outputRange: [0, 1],
-          }),
-        },
-        ]}
-        >
-          <Text style={styles.text}>AAAAAAAAAAAAAAAAAA</Text>
-        </Animated.View>
-        </Animated.View>
-        <View style={styles.slide3}>
-          <Text style={styles.text}>And simple</Text>
-        </View>
+        </View>*/}
+        {this.renderSlidePage(0, '000000000000000000000')}
+        {this.renderSlidePage(1, '111111111111111111111')}
+        {this.renderSlidePage(2, '222222222222222222222')}
       </Swiper>
     );
   }
