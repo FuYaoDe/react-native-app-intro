@@ -10,7 +10,6 @@ import React, {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 const windowsWidth = Dimensions.get('window').width;
-const windowsHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   slide0: {
@@ -101,16 +100,6 @@ export default class AppIntro extends Component {
       nextOpacity: new Animated.Value(1),
       parallax: new Animated.Value(0),
     };
-  }
-
-  componentWillMount() {
-    // this.state.parallax.setValue({x: 375, y: 0});
-    // this.setState({
-    //   parallax: {
-    //     x: 375,
-    //     y: 0,
-    //   },
-    // });
   }
 
   onNextBtnClick = (context) => {
@@ -236,31 +225,27 @@ export default class AppIntro extends Component {
     const endOpacity = isFirstPage ? 1 : 1;
     const leftPosition = isFirstPage ? 0 : windowsWidth / 3;
     const rightPosition = isFirstPage ? -windowsWidth / 3 : 0;
-    let style = index % 2 === 0 ? styles.slide0 : styles.slide1;
-    const pageView = ( <View style={[
-        style,
-      ]}
-        showsPagination={false}
-      >
-      <Animated.View style={[{
-        transform: [   // Array order matters
-          {
-            translateX: this.state.parallax.interpolate({
-              inputRange: [statRange, endRange],
-              outputRange: [leftPosition, rightPosition],
-            }),
-          }],
-      },
-      {
-        opacity: this.state.parallax.interpolate({
-          inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
-        }),
-      },
-      ]}
-      >
-        <Text style={styles.text}>{title}</Text>
-      </Animated.View>
-    </View>);
+    const style = index % 2 === 0 ? styles.slide0 : styles.slide1;
+    const pageView = (
+      <View style={[style]} showsPagination={false}>
+        <Animated.View style={[{
+          transform: [   // Array order matters
+            {
+              translateX: this.state.parallax.interpolate({
+                inputRange: [statRange, endRange],
+                outputRange: [leftPosition, rightPosition],
+              }),
+            }],
+        }, {
+          opacity: this.state.parallax.interpolate({
+            inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
+          }),
+        }]}
+        >
+          <Text style={styles.text}>{title}</Text>
+        </Animated.View>
+      </View>
+    );
     return pageView
   }
 
@@ -270,12 +255,9 @@ export default class AppIntro extends Component {
         loop={false}
         renderPagination={this.renderPagination}
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: this.state.parallax }}}]
+          [{ nativeEvent: { contentOffset: { x: this.state.parallax } } }]
         )}
       >
-        {/*<View style={styles.slide0}>
-          <Text style={styles.text}>Hello Swiper</Text>
-        </View>*/}
         {this.renderSlidePage(0, '000000000000000000000')}
         {this.renderSlidePage(1, '111111111111111111111')}
         {this.renderSlidePage(2, '222222222222222222222')}
