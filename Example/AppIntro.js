@@ -7,30 +7,43 @@ import React, {
   Component,
   Animated,
   Dimensions,
+  Image,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 const windowsWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
-  slide0: {
-    flex: 1,
+  header: {
+    flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#9DD6EB',
   },
-  slide1: {
+  pic: {
+    width: 150,
+    height: 150,
+  },
+  info: {
+    flex: 0.5,
+    backgroundColor: '#9DD6EB',
+  },
+  slide: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#97CAE5',
+    backgroundColor: '#9DD6EB',
+    padding: 15,
   },
-  slide3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#92BBD9',
+  title: {
+    color: '#fff',
+    fontSize: 30,
+    paddingBottom: 20
   },
-  text: {
+  description: {
+    color: '#fff',
+    fontSize: 20,
+  },
+  controllText: {
     color: '#fff',
     fontSize: 22,
     fontWeight: 'bold',
@@ -183,7 +196,7 @@ export default class AppIntro extends Component {
             style={styles.full}
             onPress={isSkipBtnShow ? this.props.onSkipBtnClick : null}
           >
-            <Text style={[styles.text, { color: rightTextColor }]}>Skip</Text>
+            <Text style={[styles.controllText, { color: rightTextColor }]}>Skip</Text>
           </TouchableOpacity>
         </Animated.View>
         <View style={styles.dotContainer}>
@@ -201,7 +214,7 @@ export default class AppIntro extends Component {
           }]}
           >
             <View style={styles.full}>
-              <Text style={[styles.text, { color: rightTextColor, paddingRight: 30 }]}>Done</Text>
+              <Text style={[styles.controllText, { color: rightTextColor, paddingRight: 30 }]}>Done</Text>
             </View>
           </Animated.View>
           <Animated.View style={[styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
@@ -225,15 +238,15 @@ export default class AppIntro extends Component {
     const endOpacity = isFirstPage ? 1 : 1;
     const leftPosition = isFirstPage ? 0 : windowsWidth / 3;
     const rightPosition = isFirstPage ? -windowsWidth / 3 : 0;
-    const style = index % 2 === 0 ? styles.slide0 : styles.slide1;
+    // const style = index % 2 === 0 ? styles.slide0 : styles.slide1;
     const pageView = (
-      <View style={[style]} showsPagination={false}>
-        <Animated.View style={[{
-          transform: [   // Array order matters
+      <View style={[styles.slide]} showsPagination={false}>
+        <Animated.View style={[styles.header, {
+          transform: [
             {
               translateX: this.state.parallax.interpolate({
                 inputRange: [statRange, endRange],
-                outputRange: [leftPosition, rightPosition],
+                outputRange: [isFirstPage ? leftPosition : leftPosition - 100, rightPosition],
               }),
             }],
         }, {
@@ -242,11 +255,45 @@ export default class AppIntro extends Component {
           }),
         }]}
         >
-          <Text style={styles.text}>{title}</Text>
+          <Image style={styles.pic} source={{uri: 'http://i.imgur.com/da4G0Io.png'}} />
         </Animated.View>
+        <View style={styles.info}>
+          <Animated.View style={[{
+            transform: [   // Array order matters
+              {
+                translateX: this.state.parallax.interpolate({
+                  inputRange: [statRange, endRange],
+                  outputRange: [leftPosition, rightPosition],
+                }),
+              }],
+          }, {
+            opacity: this.state.parallax.interpolate({
+              inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
+            }),
+          }]}
+          >
+            <Text style={styles.title}>{title}</Text>
+          </Animated.View>
+          <Animated.View style={[{
+            transform: [   // Array order matters
+              {
+                translateX: this.state.parallax.interpolate({
+                  inputRange: [statRange, endRange],
+                  outputRange: [isFirstPage ? leftPosition : leftPosition + 150, rightPosition],
+                }),
+              }],
+          }, {
+            opacity: this.state.parallax.interpolate({
+              inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
+            }),
+          }]}
+          >
+            <Text style={styles.description}>{title}</Text>
+          </Animated.View>
+        </View>
       </View>
     );
-    return pageView
+    return pageView;
   }
 
   render() {
