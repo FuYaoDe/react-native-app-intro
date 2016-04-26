@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fuyaode/react-native-app-intro.git"
+    "url": "https://github.com/fuyaode/react-native-app-intro"
   },
   "keywords": [
     "swiper",

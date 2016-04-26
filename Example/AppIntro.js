@@ -215,7 +215,10 @@ export default class AppIntro extends Component {
           }]}
           >
             <View style={styles.full}>
-              <Text style={[styles.controllText, { color: rightTextColor, paddingRight: 30 }]}>Done</Text>
+              <Text style={[styles.controllText, {
+                color: rightTextColor, paddingRight: 30,
+              }]}
+              >Done</Text>
             </View>
           </Animated.View>
           <Animated.View style={[styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
@@ -231,7 +234,7 @@ export default class AppIntro extends Component {
     );
   }
 
-  renderSlidePage = (index, title, description) => {
+  renderBasicSlidePage = (index, { title, description, img, level }) => {
     const isFirstPage = index === 0;
     const statRange = isFirstPage ? 0 : windowsWidth * (index - 1);
     const endRange = isFirstPage ? windowsWidth : windowsWidth * index;
@@ -239,15 +242,17 @@ export default class AppIntro extends Component {
     const endOpacity = isFirstPage ? 1 : 1;
     const leftPosition = isFirstPage ? 0 : windowsWidth / 3;
     const rightPosition = isFirstPage ? -windowsWidth / 3 : 0;
-    // const style = index % 2 === 0 ? styles.slide0 : styles.slide1;
     const pageView = (
-      <View style={[styles.slide]} showsPagination={false}>
+      <View style={[styles.slide]} showsPagination={false} key={index}>
         <Animated.View style={[styles.header, {
           transform: [
             {
               translateX: this.state.parallax.interpolate({
                 inputRange: [statRange, endRange],
-                outputRange: [isFirstPage ? leftPosition : leftPosition - 100, rightPosition],
+                outputRange: [
+                  isFirstPage ? leftPosition : leftPosition - (10 * level),
+                  isFirstPage ? rightPosition + (10 * level) : rightPosition,
+                ],
               }),
             }],
         }, {
@@ -256,7 +261,7 @@ export default class AppIntro extends Component {
           }),
         }]}
         >
-          <Image style={styles.pic} source={{uri: 'http://i.imgur.com/da4G0Io.png'}} />
+          <Image style={styles.pic} source={{ uri: img }} />
         </Animated.View>
         <View style={styles.info}>
           <Animated.View style={[{
@@ -280,7 +285,10 @@ export default class AppIntro extends Component {
               {
                 translateX: this.state.parallax.interpolate({
                   inputRange: [statRange, endRange],
-                  outputRange: [isFirstPage ? leftPosition : leftPosition + 150, rightPosition],
+                  outputRange: [
+                    isFirstPage ? leftPosition : leftPosition + (15 * level),
+                    isFirstPage ? rightPosition - (15 * level) : rightPosition,
+                  ],
                 }),
               }],
           }, {
@@ -297,7 +305,68 @@ export default class AppIntro extends Component {
     return pageView;
   }
 
+  renderChild = (children, pageIndex, index) => {
+    const level = children.props.level || 0;
+    const isFirstPage = pageIndex === 0;
+    const statRange = isFirstPage ? 0 : windowsWidth * (pageIndex - 1);
+    const endRange = isFirstPage ? windowsWidth : windowsWidth * pageIndex;
+    const startOpacity = isFirstPage ? 1 : 0;
+    const endOpacity = isFirstPage ? 1 : 1;
+    const leftPosition = isFirstPage ? 0 : windowsWidth / 3;
+    const rightPosition = isFirstPage ? -windowsWidth / 3 : 0;
+
+    const root = children.props.children;
+    let nodes = children;
+    // console.log("!!!!!!!!!!!!!!!!",children, root, children.props.level, children.props);
+    if (Array.isArray(root)) {
+      nodes = root.map((node, i) => {
+        if(node.type.displayName === 'View')
+          return this.renderChild(node, pageIndex, index+'_'+i);
+        else {
+          return node;
+        }
+      });
+    }
+
+    const animatedChild = (<Animated.View key={index} style={[children.props.style, {
+      transform: [   // Array order matters
+        {
+          translateX: this.state.parallax.interpolate({
+            inputRange: [statRange, endRange],
+            outputRange: [
+              isFirstPage ? leftPosition : leftPosition - (10 * level),
+              isFirstPage ? rightPosition + (10 * level) : rightPosition,
+            ],
+          }),
+        }],
+    }, {
+      opacity: this.state.parallax.interpolate({
+        inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
+      }),
+    }]}
+    >
+      {nodes}
+    </Animated.View>
+    );
+    return animatedChild;
+  }
+
   render() {
+    const childrens = this.props.children;
+    console.log("children => ",childrens);
+    const { pageArray } = this.props;
+    const pages = pageArray.length > 0 ?
+    pageArray.map((page, i) => this.renderBasicSlidePage(i, page)) :
+    childrens.map((children, i) => {
+      let newChild;
+      if (children.props.level) {
+        newChild = this.renderChild(children, i, i);
+      } else {
+        newChild = children;
+      }
+      return newChild;
+    });
+    console.log("!!!!!!!!!!!!!!!",pages);
     return (
       <Swiper style={styles.wrapper}
         loop={false}
@@ -306,9 +375,7 @@ export default class AppIntro extends Component {
           [{ nativeEvent: { contentOffset: { x: this.state.parallax } } }]
         )}
       >
-        {this.renderSlidePage(0, '這裡是 Title', '描述描述描述描述描述描述描述描述描述描述描述描述描述描述')}
-        {this.renderSlidePage(1, '第二個 Title', '描述描述描述描述描述描述描述描述描述描述描述描述描述描述')}
-        {this.renderSlidePage(2, '更多的 Title', '描述描述描述描述描述描述描述描述描述描述描述描述描述描述')}
+      {pages}
       </Swiper>
     );
   }
@@ -323,6 +390,7 @@ AppIntro.propTypes = {
   onSkipBtnClick: PropTypes.func,
   onDoneBtnClick: PropTypes.func,
   onNextBtnClick: PropTypes.func,
+  pageArray: PropTypes.array,
 };
 
 AppIntro.defaultProps = {
@@ -330,6 +398,7 @@ AppIntro.defaultProps = {
   activeDotColor: '#fff',
   rightTextColor: '#fff',
   leftTextColor: '#fff',
+  pageArray: [],
   onSlideChange: () => {},
   onSkipBtnClick: () => {},
   onDoneBtnClick: () => {},
