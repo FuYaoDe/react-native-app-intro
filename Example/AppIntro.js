@@ -148,7 +148,7 @@ export default class AppIntro extends Component {
       { toValue: value },
     ).start();
   }
-  getAnimatedSetting = (index) => {
+  getTransform = (index, offset, level) => {
     const isFirstPage = index === 0;
     const statRange = isFirstPage ? 0 : windowsWidth * (index - 1);
     const endRange = isFirstPage ? windowsWidth : windowsWidth * index;
@@ -156,14 +156,24 @@ export default class AppIntro extends Component {
     const endOpacity = isFirstPage ? 1 : 1;
     const leftPosition = isFirstPage ? 0 : windowsWidth / 3;
     const rightPosition = isFirstPage ? -windowsWidth / 3 : 0;
+    const transform = [{
+      transform: [
+        {
+          translateX: this.state.parallax.interpolate({
+            inputRange: [statRange, endRange],
+            outputRange: [
+              isFirstPage ? leftPosition : leftPosition - (offset * level),
+              isFirstPage ? rightPosition + (offset * level) : rightPosition,
+            ],
+          }),
+        }],
+    }, {
+      opacity: this.state.parallax.interpolate({
+        inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
+      }),
+    }];
     return {
-      isFirstPage,
-      statRange,
-      endRange,
-      startOpacity,
-      endOpacity,
-      leftPosition,
-      rightPosition,
+      transform,
     };
   }
 
@@ -253,70 +263,19 @@ export default class AppIntro extends Component {
   }
 
   renderBasicSlidePage = (index, { title, description, img, level }) => {
-    const {
-      isFirstPage,
-      statRange,
-      endRange,
-      startOpacity,
-      endOpacity,
-      leftPosition,
-      rightPosition,
-    } = this.getAnimatedSetting(index);
+    const AnimatedStyle1 = this.getTransform(index, 10, level);
+    const AnimatedStyle2 = this.getTransform(index, 0, level);
+    const AnimatedStyle3 = this.getTransform(index, 15, level);
     const pageView = (
       <View style={[styles.slide]} showsPagination={false} key={index}>
-        <Animated.View style={[styles.header, {
-          transform: [
-            {
-              translateX: this.state.parallax.interpolate({
-                inputRange: [statRange, endRange],
-                outputRange: [
-                  isFirstPage ? leftPosition : leftPosition - (10 * level),
-                  isFirstPage ? rightPosition + (10 * level) : rightPosition,
-                ],
-              }),
-            }],
-        }, {
-          opacity: this.state.parallax.interpolate({
-            inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
-          }),
-        }]}
-        >
+        <Animated.View style={[styles.header, ...AnimatedStyle1.transform]}>
           <Image style={styles.pic} source={{ uri: img }} />
         </Animated.View>
         <View style={styles.info}>
-          <Animated.View style={[{
-            transform: [   // Array order matters
-              {
-                translateX: this.state.parallax.interpolate({
-                  inputRange: [statRange, endRange],
-                  outputRange: [leftPosition, rightPosition],
-                }),
-              }],
-          }, {
-            opacity: this.state.parallax.interpolate({
-              inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
-            }),
-          }]}
-          >
+          <Animated.View style={AnimatedStyle2.transform}>
             <Text style={styles.title}>{title}</Text>
           </Animated.View>
-          <Animated.View style={[{
-            transform: [   // Array order matters
-              {
-                translateX: this.state.parallax.interpolate({
-                  inputRange: [statRange, endRange],
-                  outputRange: [
-                    isFirstPage ? leftPosition : leftPosition + (15 * level),
-                    isFirstPage ? rightPosition - (15 * level) : rightPosition,
-                  ],
-                }),
-              }],
-          }, {
-            opacity: this.state.parallax.interpolate({
-              inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
-            }),
-          }]}
-          >
+          <Animated.View style={AnimatedStyle3.transform}>
             <Text style={styles.description}>{description}</Text>
           </Animated.View>
         </View>
@@ -327,16 +286,7 @@ export default class AppIntro extends Component {
 
   renderChild = (children, pageIndex, index) => {
     const level = children.props.level || 0;
-    const {
-      isFirstPage,
-      statRange,
-      endRange,
-      startOpacity,
-      endOpacity,
-      leftPosition,
-      rightPosition,
-    } = this.getAnimatedSetting(pageIndex);
-
+    const { transform } = this.getTransform(pageIndex, 10, level);
     const root = children.props.children;
     let nodes = children;
     if (Array.isArray(root)) {
@@ -348,27 +298,9 @@ export default class AppIntro extends Component {
         return element;
       });
     }
-    let transform = [];
-    if (level !== 0) {
-      transform = [{
-        transform: [
-          {
-            translateX: this.state.parallax.interpolate({
-              inputRange: [statRange, endRange],
-              outputRange: [
-                isFirstPage ? leftPosition : leftPosition - (10 * level),
-                isFirstPage ? rightPosition + (10 * level) : rightPosition,
-              ],
-            }),
-          }],
-      }, {
-        opacity: this.state.parallax.interpolate({
-          inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
-        }),
-      }];
-    }
+    const animatedStyle = level === 0 ? null : transform;
     const animatedChild = (
-      <Animated.View key={index} style={[children.props.style, ...transform]}>
+      <Animated.View key={index} style={[children.props.style, animatedStyle]}>
         {nodes}
       </Animated.View>
     );
