@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   info: {
     flex: 0.5,
     backgroundColor: '#9DD6EB',
+    alignItems: 'center',
   },
   slide: {
     flex: 1,
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#fff',
     fontSize: 30,
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   description: {
     color: '#fff',
@@ -230,7 +231,7 @@ export default class AppIntro extends Component {
     );
   }
 
-  renderSlidePage = (index, title) => {
+  renderSlidePage = (index, title, description) => {
     const isFirstPage = index === 0;
     const statRange = isFirstPage ? 0 : windowsWidth * (index - 1);
     const endRange = isFirstPage ? windowsWidth : windowsWidth * index;
@@ -288,7 +289,7 @@ export default class AppIntro extends Component {
             }),
           }]}
           >
-            <Text style={styles.description}>{title}</Text>
+            <Text style={styles.description}>{description}</Text>
           </Animated.View>
         </View>
       </View>
@@ -305,9 +306,9 @@ export default class AppIntro extends Component {
           [{ nativeEvent: { contentOffset: { x: this.state.parallax } } }]
         )}
       >
-        {this.renderSlidePage(0, '000000000000000000000')}
-        {this.renderSlidePage(1, '111111111111111111111')}
-        {this.renderSlidePage(2, '222222222222222222222')}
+        {this.renderSlidePage(0, '這裡是 Title', '描述描述描述描述描述描述描述描述描述描述描述描述描述描述')}
+        {this.renderSlidePage(1, '第二個 Title', '描述描述描述描述描述描述描述描述描述描述描述描述描述描述')}
+        {this.renderSlidePage(2, '更多的 Title', '描述描述描述描述描述描述描述描述描述描述描述描述描述描述')}
       </Swiper>
     );
   }
