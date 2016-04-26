@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
     flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#9DD6EB',
   },
   pic: {
     width: 150,
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
   },
   info: {
     flex: 0.5,
-    backgroundColor: '#9DD6EB',
     alignItems: 'center',
   },
   slide: {
@@ -296,12 +294,20 @@ export default class AppIntro extends Component {
         return element;
       });
     }
-    const animatedStyle = level === 0 ? null : transform;
-    const animatedChild = (
-      <Animated.View key={index} style={[children.props.style, animatedStyle]}>
-        {nodes}
-      </Animated.View>
-    );
+    let animatedChild = children;
+    if (level !== 0) {
+      animatedChild = (
+        <Animated.View key={index} style={[children.props.style, transform]}>
+          {nodes}
+        </Animated.View>
+      );
+    } else {
+      animatedChild = (
+        <View key={index} style={children.props.style}>
+          {nodes}
+        </View>
+      );
+    }
     return animatedChild;
   }
 
