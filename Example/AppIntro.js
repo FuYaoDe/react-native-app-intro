@@ -148,6 +148,24 @@ export default class AppIntro extends Component {
       { toValue: value },
     ).start();
   }
+  getAnimatedSetting = (index) => {
+    const isFirstPage = index === 0;
+    const statRange = isFirstPage ? 0 : windowsWidth * (index - 1);
+    const endRange = isFirstPage ? windowsWidth : windowsWidth * index;
+    const startOpacity = isFirstPage ? 1 : 0;
+    const endOpacity = isFirstPage ? 1 : 1;
+    const leftPosition = isFirstPage ? 0 : windowsWidth / 3;
+    const rightPosition = isFirstPage ? -windowsWidth / 3 : 0;
+    return {
+      isFirstPage,
+      statRange,
+      endRange,
+      startOpacity,
+      endOpacity,
+      leftPosition,
+      rightPosition,
+    };
+  }
 
   renderPagination = (index, total, context) => {
     const { activeDotColor, dotColor, rightTextColor } = this.props;
@@ -235,13 +253,15 @@ export default class AppIntro extends Component {
   }
 
   renderBasicSlidePage = (index, { title, description, img, level }) => {
-    const isFirstPage = index === 0;
-    const statRange = isFirstPage ? 0 : windowsWidth * (index - 1);
-    const endRange = isFirstPage ? windowsWidth : windowsWidth * index;
-    const startOpacity = isFirstPage ? 1 : 0;
-    const endOpacity = isFirstPage ? 1 : 1;
-    const leftPosition = isFirstPage ? 0 : windowsWidth / 3;
-    const rightPosition = isFirstPage ? -windowsWidth / 3 : 0;
+    const {
+      isFirstPage,
+      statRange,
+      endRange,
+      startOpacity,
+      endOpacity,
+      leftPosition,
+      rightPosition,
+    } = this.getAnimatedSetting(index);
     const pageView = (
       <View style={[styles.slide]} showsPagination={false} key={index}>
         <Animated.View style={[styles.header, {
@@ -307,66 +327,60 @@ export default class AppIntro extends Component {
 
   renderChild = (children, pageIndex, index) => {
     const level = children.props.level || 0;
-    const isFirstPage = pageIndex === 0;
-    const statRange = isFirstPage ? 0 : windowsWidth * (pageIndex - 1);
-    const endRange = isFirstPage ? windowsWidth : windowsWidth * pageIndex;
-    const startOpacity = isFirstPage ? 1 : 0;
-    const endOpacity = isFirstPage ? 1 : 1;
-    const leftPosition = isFirstPage ? 0 : windowsWidth / 3;
-    const rightPosition = isFirstPage ? -windowsWidth / 3 : 0;
+    const {
+      isFirstPage,
+      statRange,
+      endRange,
+      startOpacity,
+      endOpacity,
+      leftPosition,
+      rightPosition,
+    } = this.getAnimatedSetting(pageIndex);
 
     const root = children.props.children;
     let nodes = children;
-    // console.log("!!!!!!!!!!!!!!!!",children, root, children.props.level, children.props);
     if (Array.isArray(root)) {
       nodes = root.map((node, i) => {
-        if(node.type.displayName === 'View')
-          return this.renderChild(node, pageIndex, index+'_'+i);
-        else {
-          return node;
+        let element = node;
+        if (node.type.displayName === 'View') {
+          element = this.renderChild(node, pageIndex, `${index}_${i}`);
         }
+        return element;
       });
     }
-
-    const animatedChild = (<Animated.View key={index} style={[children.props.style, {
-      transform: [   // Array order matters
-        {
-          translateX: this.state.parallax.interpolate({
-            inputRange: [statRange, endRange],
-            outputRange: [
-              isFirstPage ? leftPosition : leftPosition - (10 * level),
-              isFirstPage ? rightPosition + (10 * level) : rightPosition,
-            ],
-          }),
-        }],
-    }, {
-      opacity: this.state.parallax.interpolate({
-        inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
-      }),
-    }]}
-    >
-      {nodes}
-    </Animated.View>
+    let transform = [];
+    if (level !== 0) {
+      transform = [{
+        transform: [
+          {
+            translateX: this.state.parallax.interpolate({
+              inputRange: [statRange, endRange],
+              outputRange: [
+                isFirstPage ? leftPosition : leftPosition - (10 * level),
+                isFirstPage ? rightPosition + (10 * level) : rightPosition,
+              ],
+            }),
+          }],
+      }, {
+        opacity: this.state.parallax.interpolate({
+          inputRange: [statRange, endRange], outputRange: [startOpacity, endOpacity],
+        }),
+      }];
+    }
+    const animatedChild = (
+      <Animated.View key={index} style={[children.props.style, ...transform]}>
+        {nodes}
+      </Animated.View>
     );
     return animatedChild;
   }
 
   render() {
     const childrens = this.props.children;
-    console.log("children => ",childrens);
     const { pageArray } = this.props;
     const pages = pageArray.length > 0 ?
     pageArray.map((page, i) => this.renderBasicSlidePage(i, page)) :
-    childrens.map((children, i) => {
-      let newChild;
-      if (children.props.level) {
-        newChild = this.renderChild(children, i, i);
-      } else {
-        newChild = children;
-      }
-      return newChild;
-    });
-    console.log("!!!!!!!!!!!!!!!",pages);
+    childrens.map((children, i) => this.renderChild(children, i, i));
     return (
       <Swiper style={styles.wrapper}
         loop={false}

@@ -70,14 +70,14 @@ class Example extends Component {
         onSlideChange={this.onSlideChangeHandle}
         //pageArray={pageArray}
       >
-      <View style={styles.slide} level={10} >
+      <View style={styles.slide} level={0} >
         <View level={5}><Text style={styles.text} >123123</Text></View>
         <View level={4}><Text style={styles.text} >123123</Text></View>
         <View level={10}><Text style={styles.text} >123123</Text></View>
         <View level={15}><Text style={styles.text} >123123</Text></View>
         <View level={10}><Text style={styles.text} >123123</Text></View>
       </View>
-      <View style={styles.slide} level={10} >
+      <View style={styles.slide} level={0} >
         <View level={5}>
           <Text style={styles.text} >123123</Text>
           <View level={10}>
