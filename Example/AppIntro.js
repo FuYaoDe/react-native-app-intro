@@ -121,10 +121,8 @@ export default class AppIntro extends Component {
     const state = context.state;
     const diff = (context.props.loop ? 1 : 0) + 1 + context.state.index;
     let x = 0;
-    let y = 0;
     if (state.dir === 'x') x = diff * state.width;
-    if (state.dir === 'y') y = diff * state.height;
-    context.refs.scrollView.scrollTo({ y, x });
+    context.refs.scrollView.scrollTo({ y: 0, x });
     this.props.onNextBtnClick();
   }
 
