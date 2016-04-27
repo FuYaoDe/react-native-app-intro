@@ -258,21 +258,28 @@ export default class AppIntro extends Component {
     );
   }
 
-  renderBasicSlidePage = (index, { title, description, img, level }) => {
+  renderBasicSlidePage = (index, {
+    title,
+    description,
+    img,
+    backgroundColor,
+    fontColor,
+    level,
+  }) => {
     const AnimatedStyle1 = this.getTransform(index, 10, level);
     const AnimatedStyle2 = this.getTransform(index, 0, level);
     const AnimatedStyle3 = this.getTransform(index, 15, level);
     const pageView = (
-      <View style={[styles.slide]} showsPagination={false} key={index}>
+      <View style={[styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
         <Animated.View style={[styles.header, ...AnimatedStyle1.transform]}>
           <Image style={styles.pic} source={{ uri: img }} />
         </Animated.View>
         <View style={styles.info}>
           <Animated.View style={AnimatedStyle2.transform}>
-            <Text style={styles.title}>{title}</Text>
+            <Text style={[styles.title, { color: fontColor }]}>{title}</Text>
           </Animated.View>
           <Animated.View style={AnimatedStyle3.transform}>
-            <Text style={styles.description}>{description}</Text>
+            <Text style={[styles.description, { color: fontColor }]}>{description}</Text>
           </Animated.View>
         </View>
       </View>
