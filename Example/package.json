@@ -9,7 +9,7 @@
   "dependencies": {
     "react": "^0.14.8",
     "react-native": "^0.24.1",
-    "react-native-swiper": "^1.4.3"
+    "react-native-app-intro": "file:.."
   },
   "devDependencies": {
     "babel-eslint": "^6.0.3",
