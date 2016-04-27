@@ -71,7 +71,7 @@ AppRegistry.registerComponent('Example', () => Example);
 
 ### Advanced Usage
 
-If you need customized view like my Example, you can  pass in `View` component into AppIntro component and set level.
+If you need customized page like my Example, you can  pass in `View` component into AppIntro component and set level. Remember any need use parallax effect component, Need to be `<View level={10}></View>` inside.
 
 <img src="http://i.giphy.com/26AHwds1g5HjXrd4s.gif">
 ```
@@ -142,3 +142,8 @@ AppRegistry.registerComponent('Example', () => Example);
 | onDoneBtnClick | func     |                         | function to call when the Done button click                                                                                                                                                                                                                                                                                                                      |
 | onNextBtnClick | func     |                         | function to call when the Next '>' button click                                                                                                                                                                                                                                                                                                                  |
 | pageArray      | array    |                         | In the basic usage, you can input object array to render basic view example: ```[[{title: 'Page 1', description: 'Description 1', img: 'https://goo.gl/uwzs0C', imgStyle: {height: 80 * 2.5, width: 109 * 2.5 }, backgroundColor: '#fa931d', fontColor: '#fff', level: 10 }]``` , level is parallax effect level ,if you use pageArray you can't use custom view |
+
+##### Children View Properties
+| Prop  | PropType | Default Value | Description           |
+|-------|----------|---------------|-----------------------|
+| level | number   |               | parallax effect level |

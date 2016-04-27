@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fuyaode/react-native-app-intro"
+    "url": "git+https://github.com/fuyaode/react-native-app-intro.git"
   },
   "keywords": [
     "swiper",
@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/fuyaode/react-native-app-intro/issues"
   },
-  "homepage": "https://github.com/fuyaode/react-native-app-intro#readme"
+  "homepage": "https://github.com/fuyaode/react-native-app-intro#readme",
+  "dependencies": {
+    "react-native-swiper": "git+https://github.com/FuYaoDe/react-native-swiper.git"
+  }
 }
