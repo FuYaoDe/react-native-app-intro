@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   info: {
     flex: 0.5,
     alignItems: 'center',
+    padding: 30,
   },
   slide: {
     flex: 1,
@@ -262,6 +263,7 @@ export default class AppIntro extends Component {
     title,
     description,
     img,
+    imgStyle,
     backgroundColor,
     fontColor,
     level,
@@ -272,7 +274,7 @@ export default class AppIntro extends Component {
     const pageView = (
       <View style={[styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
         <Animated.View style={[styles.header, ...AnimatedStyle1.transform]}>
-          <Image style={styles.pic} source={{ uri: img }} />
+          <Image style={imgStyle} source={{ uri: img }} />
         </Animated.View>
         <View style={styles.info}>
           <Animated.View style={AnimatedStyle2.transform}>

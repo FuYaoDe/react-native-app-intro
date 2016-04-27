@@ -71,24 +71,47 @@ class Example extends Component {
 
   render() {
     const pageArray = [{
-      title: '這裡是 Title',
-      description: '描述描述描述描述描述描述描述描述描述描述描述描述描述描述',
-      img: 'http://i.imgur.com/da4G0Io.png',
-      backgroundColor: '#9DD6EB',
+      title: 'Page 1',
+      description: 'Description 1',
+      img: 'https://goo.gl/uwzs0C',
+      imgStyle: {
+        height: 80 * 2.5,
+        width: 109 * 2.5,
+      },
+      backgroundColor: '#fa931d',
       fontColor: '#fff',
       level: 10,
     }, {
-      title: '這裡是 Title',
-      description: '描述描述描述描述描述描述描述描述描述描述描述描述描述描述',
-      img: 'http://i.imgur.com/da4G0Io.png',
-      backgroundColor: '#9DD600',
+      title: 'Page 2',
+      description: 'Description 2',
+      img: 'https://goo.gl/GPO6JB',
+      imgStyle: {
+        height: 93 * 2.5,
+        width: 103 * 2.5,
+      },
+      backgroundColor: '#a4b602',
       fontColor: '#fff',
       level: 10,
     }, {
-      title: '這裡是 Title',
-      description: '描述描述描述描述描述描述描述描述描述描述描述描述描述描述',
-      img: 'http://i.imgur.com/da4G0Io.png',
-      backgroundColor: '#9D00EB',
+      title: 'Page 3',
+      description: 'Description 3',
+      img: 'https://goo.gl/FWm8AR',
+      imgStyle: {
+        height: 98 * 2.5,
+        width: 138 * 2.5,
+      },
+      backgroundColor: '#406E9F',
+      fontColor: '#fff',
+      level: 10,
+    },{
+      title: 'Page 4',
+      description: 'Description 4',
+      img: 'https://goo.gl/GKYWh5',
+      imgStyle: {
+        height: 98 * 2.5,
+        width: 104 * 2.5,
+      },
+      backgroundColor: '#DB4302',
       fontColor: '#fff',
       level: 10,
     }];
@@ -98,7 +121,7 @@ class Example extends Component {
         onDoneBtnClick={this.doneBtnHandle}
         onSkipBtnClick={this.onSkipBtnHandle}
         onSlideChange={this.onSlideChangeHandle}
-        //pageArray={pageArray}
+        pageArray={pageArray}
       >
       <View style={[styles.slide,{ backgroundColor: '#fa931d' }]}>
         <View style={styles.header}>
