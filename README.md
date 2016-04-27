@@ -13,6 +13,9 @@ $ npm i react-native-app-intro --save
 
 ### Basic Usage
 
+You can use pageArray quick generation your app intro with parallax effect.   
+
+<img src="http://i.giphy.com/l3V0khy22aUviTTaM.gif">
 ```
 import React, { AppRegistry, Component, Alert, } from 'react-native';
 import AppIntro from './AppIntro';
@@ -66,6 +69,67 @@ class Example extends Component {
 AppRegistry.registerComponent('Example', () => Example);
 ```
 
+### Advanced Usage
+
+If you need customized view like my Example, you can  pass in `View` component into AppIntro component and set level.
+
+<img src="http://i.giphy.com/26AHwds1g5HjXrd4s.gif">
+```
+import React, {
+  AppRegistry,
+  Component,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import AppIntro from './AppIntro';
+
+const styles = StyleSheet.create({
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#9DD6EB',
+    padding: 15,
+  },
+  text: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+});
+
+class Example extends Component {
+
+  render() {
+    return (
+      <AppIntro>
+        <View style={[styles.slide,{ backgroundColor: '#fa931d' }]}>
+          <View level={10}><Text style={styles.text}>Page 1</Text></View>
+          <View level={15}><Text style={styles.text}>Page 1</Text></View>
+          <View level={8}><Text style={styles.text}>Page 1</Text></View>
+        </View>
+        <View style={[styles.slide, { backgroundColor: '#a4b602' }]}>
+          <View level={-10}><Text style={styles.text}>Page 2</Text></View>
+          <View level={5}><Text style={styles.text}>Page 2</Text></View>
+          <View level={20}><Text style={styles.text}>Page 2</Text></View>
+        </View>
+        <View style={[styles.slide,{ backgroundColor: '#fa931d' }]}>
+          <View level={8}><Text style={styles.text}>Page 3</Text></View>
+          <View level={0}><Text style={styles.text}>Page 3</Text></View>
+          <View level={-10}><Text style={styles.text}>Page 3</Text></View>
+        </View>
+        <View style={[styles.slide, { backgroundColor: '#a4b602' }]}>
+          <View level={5}><Text style={styles.text}>Page 4</Text></View>
+          <View level={10}><Text style={styles.text}>Page 4</Text></View>
+          <View level={15}><Text style={styles.text}>Page 4</Text></View>
+        </View>
+      </AppIntro>
+    );
+  }
+}
+AppRegistry.registerComponent('Example', () => Example);
+```
 ### Properties
 | Prop           | PropType | Default Value           | Description                                                                                                                                                                                                                                                                                                                                                      |
 |----------------|----------|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
