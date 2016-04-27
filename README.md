@@ -16,7 +16,8 @@ $ npm i react-native-app-intro --save
 You can use pageArray quick generation your app intro with parallax effect.   
 
 <img src="http://i.giphy.com/l3V0khy22aUviTTaM.gif">
-```
+
+```javascript
 import React, { AppRegistry, Component, Alert, } from 'react-native';
 import AppIntro from './AppIntro';
 
@@ -74,7 +75,8 @@ AppRegistry.registerComponent('Example', () => Example);
 If you need customized page like my Example, you can  pass in `View` component into AppIntro component and set level. Remember any need use parallax effect component, Need to be `<View level={10}></View>` inside.
 
 <img src="http://i.giphy.com/26AHwds1g5HjXrd4s.gif">
-```
+
+```javascript
 import React, {
   AppRegistry,
   Component,
@@ -130,7 +132,7 @@ class Example extends Component {
 }
 AppRegistry.registerComponent('Example', () => Example);
 ```
-### Properties
+## **Properties**
 | Prop           | PropType | Default Value           | Description                                                                                                                                                                                                                                                                                                                                                      |
 |----------------|----------|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | dotColor       | string   | 'rgba(255,255,255,0.3)' | Bottom of the page dot color                                                                                                                                                                                                                                                                                                                                     |
@@ -143,7 +145,7 @@ AppRegistry.registerComponent('Example', () => Example);
 | onNextBtnClick | func     |                         | function to call when the Next '>' button click                                                                                                                                                                                                                                                                                                                  |
 | pageArray      | array    |                         | In the basic usage, you can input object array to render basic view example: ```[[{title: 'Page 1', description: 'Description 1', img: 'https://goo.gl/uwzs0C', imgStyle: {height: 80 * 2.5, width: 109 * 2.5 }, backgroundColor: '#fa931d', fontColor: '#fff', level: 10 }]``` , level is parallax effect level ,if you use pageArray you can't use custom view |
 
-##### Children View Properties
+##### **Children View Properties**
 | Prop  | PropType | Default Value | Description           |
 |-------|----------|---------------|-----------------------|
 | level | number   |               | parallax effect level |
