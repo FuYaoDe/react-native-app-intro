@@ -19,7 +19,7 @@ You can use pageArray quick generation your app intro with parallax effect.
 
 ```javascript
 import React, { AppRegistry, Component, Alert, } from 'react-native';
-import AppIntro from './AppIntro';
+import AppIntro from 'react-native-app-intro';
 
 class Example extends Component {
   onSkipBtnHandle = () => {
@@ -35,7 +35,7 @@ class Example extends Component {
     const pageArray = [{
       title: 'Page 1',
       description: 'Description 1',
-      img: 'https://goo.gl/uwzs0C',
+      img: 'https://goo.gl/Bnc3XP',
       imgStyle: {
         height: 80 * 2.5,
         width: 109 * 2.5,
@@ -84,7 +84,7 @@ import React, {
   Text,
   View,
 } from 'react-native';
-import AppIntro from './AppIntro';
+import AppIntro from 'react-native-app-intro';
 
 const styles = StyleSheet.create({
   slide: {
