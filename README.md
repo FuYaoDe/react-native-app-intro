@@ -8,6 +8,7 @@ react-native-app-intro is a react native plugin implementing a parallax effect w
 
 <img src="http://i.giphy.com/3o6ozjLoOnYTXfzJgQ.gif">
 
+<a href="http://www.freepik.com">Designed by Freepik</a>
 
 ### Installation
 
