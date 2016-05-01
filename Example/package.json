@@ -9,7 +9,8 @@
   "dependencies": {
     "react": "^0.14.8",
     "react-native": "^0.24.1",
-    "react-native-app-intro": "file:.."
+    "react-native-app-intro": "file:..",
+    "react-native-viewpager": "^0.2.1"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.3",

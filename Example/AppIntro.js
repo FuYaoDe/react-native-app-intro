@@ -331,10 +331,10 @@ export default class AppIntro extends Component {
         loop={false}
         renderPagination={this.renderPagination}
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: this.state.parallax } } }]
+          [{ x: this.state.parallax }]
         )}
       >
-      {pages}
+        {pages}
       </Swiper>
     );
   }

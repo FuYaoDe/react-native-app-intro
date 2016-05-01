@@ -13,7 +13,7 @@ import React, {
   Alert,
   Image,
 } from 'react-native';
-import AppIntro from 'react-native-app-intro';
+import AppIntro from './AppIntro';
 
 const styles = StyleSheet.create({
   slide: {
