@@ -23,7 +23,8 @@ You can use pageArray quick generation your app intro with parallax effect.
 <img src="http://i.giphy.com/l3V0khy22aUviTTaM.gif">
 
 ```javascript
-import React, { AppRegistry, Component, Alert, } from 'react-native';
+import React, { Component } from 'react';
+import { AppRegistry, Alert } from 'react-native';
 import AppIntro from 'react-native-app-intro';
 
 class Example extends Component {
@@ -82,9 +83,9 @@ If you need customized page like my Example, you can  pass in `View` component i
 <img src="http://i.giphy.com/26AHwds1g5HjXrd4s.gif">
 
 ```javascript
-import React, {
+import React, { Component } from 'react';
+import {
   AppRegistry,
-  Component,
   StyleSheet,
   Text,
   View,
