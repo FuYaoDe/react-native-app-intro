@@ -4,15 +4,9 @@
  * @flow
  */
 
-import React, {
-  AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  Image,
-} from 'react-native';
+import React, {Component} from 'react';
+
+import {AppRegistry, StyleSheet, Text, View, Alert, Image} from 'react-native';
 import AppIntro from 'react-native-app-intro';
 
 const styles = StyleSheet.create({

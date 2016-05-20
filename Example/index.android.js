@@ -3,13 +3,9 @@
  * https://github.com/facebook/react-native
  */
 
-import React, {
-  AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import React, {Component} from 'react';
+
+import {AppRegistry, StyleSheet, Text, View} from 'react-native';
 
 class Example extends Component {
   render() {
