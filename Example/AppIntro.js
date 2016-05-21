@@ -1,7 +1,17 @@
-import React, {Component, PropTypes} from 'react';
-import {StyleSheet, Text, View, TouchableOpacity, Animated, Dimensions, Image} from 'react-native';
+import React, { Component, PropTypes } from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Animated,
+  Dimensions,
+  Image,
+  Platform,
+} from 'react-native';
 import Swiper from 'react-native-swiper';
 const windowsWidth = Dimensions.get('window').width;
+const windowsHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   header: {
@@ -112,7 +122,16 @@ export default class AppIntro extends Component {
     const diff = (context.props.loop ? 1 : 0) + 1 + context.state.index;
     let x = 0;
     if (state.dir === 'x') x = diff * state.width;
-    context.refs.scrollView.scrollTo({ y: 0, x });
+    if (Platform.OS === 'ios') {
+      context.refs.scrollView.scrollTo({ y: 0, x });
+    } else {
+      context.refs.scrollView.setPage(diff);
+      context.onScrollEnd({
+        nativeEvent: {
+          position: diff,
+        },
+      });
+    }
     this.props.onNextBtnClick();
   }
 
@@ -197,57 +216,91 @@ export default class AppIntro extends Component {
       isDoneBtnShow = false;
       isSkipBtnShow = true;
     }
-    return (
-      <View style={styles.paginationContainer}>
-        <Animated.View style={[styles.btnContainer, {
-          opacity: this.state.skipFadeOpacity,
-          transform: [{
-            translateX: this.state.skipFadeOpacity.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 15],
-            }),
-          }],
-        }]}
-        >
-          <TouchableOpacity
-            style={styles.full}
-            onPress={isSkipBtnShow ? this.props.onSkipBtnClick : null}
-          >
-            <Text style={[styles.controllText, { color: rightTextColor }]}>Skip</Text>
-          </TouchableOpacity>
-        </Animated.View>
-        <View style={styles.dotContainer}>
-          {dots}
-        </View>
-        <View style={styles.btnContainer}>
-          <Animated.View style={[styles.full, { height: 0 }, {
-            opacity: this.state.doneFadeOpacity,
+    let controllBts;
+    if (Platform.OS === 'ios') {
+      controllBts =  (
+        <View style={styles.paginationContainer}>
+          <Animated.View style={[styles.btnContainer, {
+            opacity: this.state.skipFadeOpacity,
             transform: [{
               translateX: this.state.skipFadeOpacity.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, 20],
+                outputRange: [0, 15],
               }),
             }],
           }]}
           >
-            <View style={styles.full}>
-              <Text style={[styles.controllText, {
-                color: rightTextColor, paddingRight: 30,
-              }]}
-              >Done</Text>
-            </View>
+            <TouchableOpacity
+              style={styles.full}
+              onPress={isSkipBtnShow ? this.props.onSkipBtnClick : null}
+            >
+              <Text style={[styles.controllText, { color: rightTextColor }]}>Skip</Text>
+            </TouchableOpacity>
           </Animated.View>
-          <Animated.View style={[styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
+          <View style={styles.dotContainer}>
+            {dots}
+          </View>
+          <View style={styles.btnContainer}>
+            <Animated.View style={[styles.full, { height: 0 }, {
+              opacity: this.state.doneFadeOpacity,
+              transform: [{
+                translateX: this.state.skipFadeOpacity.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [0, 20],
+                }),
+              }],
+            }]}
+            >
+              <View style={styles.full}>
+                <Text style={[styles.controllText, {
+                  color: rightTextColor, paddingRight: 30,
+                }]}
+                >Done</Text>
+              </View>
+            </Animated.View>
+            <Animated.View style={[styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
+              <TouchableOpacity style={styles.full}
+                onPress={ isDoneBtnShow ?
+                  this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
+              >
+               <Text style={[styles.nextButtonText, { color: rightTextColor }]}>›</Text>
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
+        </View>
+      );
+    } else {
+      controllBts = (
+        <View style={styles.paginationContainer}>
+          <View style={[styles.btnContainer, {
+            paddingBottom: 5,
+            opacity: isSkipBtnShow ? 1 : 0,
+          }]}
+          >
+            <TouchableOpacity
+              style={styles.full}
+              onPress={isSkipBtnShow ? this.props.onSkipBtnClick : null}
+            >
+              <Text style={[styles.controllText, { color: rightTextColor }]}>Skip</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.dotContainer}>
+            {dots}
+          </View>
+          <View style={[styles.btnContainer, { height: 0, paddingBottom: 5 }]}>
             <TouchableOpacity style={styles.full}
               onPress={ isDoneBtnShow ?
                 this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
             >
-             <Text style={[styles.nextButtonText, { color: rightTextColor }]}>›</Text>
+             <Text style={[styles.nextButtonText, { color: rightTextColor }]}>
+               {isDoneBtnShow ? 'Done' : '›'}
+             </Text>
             </TouchableOpacity>
-          </Animated.View>
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
+    return controllBts;
   }
 
   renderBasicSlidePage = (index, {
@@ -314,19 +367,46 @@ export default class AppIntro extends Component {
   render() {
     const childrens = this.props.children;
     const { pageArray } = this.props;
-    const pages = pageArray.length > 0 ?
-    pageArray.map((page, i) => this.renderBasicSlidePage(i, page)) :
-    childrens.map((children, i) => this.renderChild(children, i, i));
+    let pages = [];
+    let androidPages = null;
+    if (pageArray.length > 0) {
+      pages = pageArray.map((page, i) => this.renderBasicSlidePage(i, page));
+    } else {
+      if (Platform.OS === 'ios') {
+        pages = childrens.map((children, i) => this.renderChild(children, i, i));
+      } else {
+        androidPages = childrens.map((children, i) => {
+          const { transform } = this.getTransform(i, -windowsWidth / 3 * 2, 1);
+          pages.push(<View key={i} />);
+          return (
+            <Animated.View key={i} style={[{
+              position: 'absolute',
+              height: windowsHeight,
+              width: windowsWidth,
+              top: 0,
+            }, {
+              ...transform[0],
+            }]}
+            >
+              {this.renderChild(children, i, i)}
+            </Animated.View>
+          );
+        });
+      }
+    }
     return (
-      <Swiper style={styles.wrapper}
-        loop={false}
-        renderPagination={this.renderPagination}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: this.state.parallax } } }]
-        )}
-      >
-      {pages}
-      </Swiper>
+      <View>
+        {androidPages}
+        <Swiper
+          loop={false}
+          renderPagination={this.renderPagination}
+          onScroll={Animated.event(
+            [{ x: this.state.parallax }]
+          )}
+        >
+          {pages}
+        </Swiper>
+      </View>
     );
   }
 }
