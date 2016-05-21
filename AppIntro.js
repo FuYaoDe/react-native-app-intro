@@ -125,9 +125,11 @@ export default class AppIntro extends Component {
     if (Platform.OS === 'ios') {
       context.refs.scrollView.scrollTo({ y: 0, x });
     } else {
-      context.refs.scrollView.setPage(context.state.index + 1);
-      context.setState({
-        index: context.state.index + 1,
+      context.refs.scrollView.setPage(diff);
+      context.onScrollEnd({
+        nativeEvent: {
+          position: diff,
+        },
       });
     }
     this.props.onNextBtnClick();
