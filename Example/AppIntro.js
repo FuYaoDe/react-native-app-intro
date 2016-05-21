@@ -123,7 +123,14 @@ export default class AppIntro extends Component {
     const diff = (context.props.loop ? 1 : 0) + 1 + context.state.index;
     let x = 0;
     if (state.dir === 'x') x = diff * state.width;
-    context.refs.scrollView.scrollTo({ y: 0, x });
+    if (Platform.OS === 'ios') {
+      context.refs.scrollView.scrollTo({ y: 0, x });
+    } else {
+      context.refs.scrollView.setPage(context.state.index + 1);
+      context.setState({
+        index: context.state.index + 1,
+      });
+    }
     this.props.onNextBtnClick();
   }
 
