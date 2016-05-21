@@ -139,6 +139,21 @@ class Example extends Component {
 }
 AppRegistry.registerComponent('Example', () => Example);
 ```
+
+And in Android, image inside view component, view need width、height.
+```javascript
+<View style={{
+  position: 'absolute',
+  top: 80,
+  left: 30,
+  width: windows.width,
+  height: windows.height,
+}} level={20}
+>
+  <Image style={{ width: 115, height: 70 }} source={require('./img/1/c2.png')} />
+</View>
+```
+
 ## **Properties**
 | Prop           | PropType | Default Value           | Description                                                                                                                                                                                                                                                                                                                                                      |
 |----------------|----------|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
