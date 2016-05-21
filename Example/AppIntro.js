@@ -1,10 +1,9 @@
-import React, {
+import React, { Component, PropTypes } from 'react';
+import {
   StyleSheet,
   Text,
   View,
-  PropTypes,
   TouchableOpacity,
-  Component,
   Animated,
   Dimensions,
   Image,

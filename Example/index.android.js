@@ -4,19 +4,17 @@
  * @flow
  */
 
-import React, {
+import React, { Component } from 'react';
+import {
   AppRegistry,
-  Component,
   StyleSheet,
   Text,
   View,
   Alert,
   Image,
-  Animated,
   Dimensions,
 } from 'react-native';
 import AppIntro from './AppIntro';
-import ViewPager from 'react-native-viewpager';
 const windowsWidth = Dimensions.get('window').width;
 const windowsHeight = Dimensions.get('window').height;
 
