@@ -14,7 +14,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
-import AppIntro from './AppIntro';
+import AppIntro from 'react-native-app-intro';
 const windowsWidth = Dimensions.get('window').width;
 const windowsHeight = Dimensions.get('window').height;
 
