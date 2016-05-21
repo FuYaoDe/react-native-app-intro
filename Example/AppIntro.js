@@ -8,9 +8,11 @@ import React, {
   Animated,
   Dimensions,
   Image,
+  Platform,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 const windowsWidth = Dimensions.get('window').width;
+const windowsHeight = Dimensions.get('window').height;
 
 const styles = StyleSheet.create({
   header: {
@@ -323,19 +325,46 @@ export default class AppIntro extends Component {
   render() {
     const childrens = this.props.children;
     const { pageArray } = this.props;
-    const pages = pageArray.length > 0 ?
-    pageArray.map((page, i) => this.renderBasicSlidePage(i, page)) :
-    childrens.map((children, i) => this.renderChild(children, i, i));
+    let pages = [];
+    let androidPages = null;
+    if (pageArray.length > 0) {
+      pages = pageArray.map((page, i) => this.renderBasicSlidePage(i, page));
+    } else {
+      if (Platform.OS === 'ios') {
+        pages = childrens.map((children, i) => this.renderChild(children, i, i));
+      } else {
+        androidPages = childrens.map((children, i) => {
+          const { transform } = this.getTransform(i, -windowsWidth / 3 * 2, 1);
+          pages.push(<View key={i} />);
+          return (
+            <Animated.View key={i} style={[{
+              position: 'absolute',
+              height: windowsHeight,
+              width: windowsWidth,
+              top: 0,
+            }, {
+              ...transform[0],
+            }]}
+            >
+              {this.renderChild(children, i, i)}
+            </Animated.View>
+          );
+        });
+      }
+    }
     return (
-      <Swiper style={styles.wrapper}
-        loop={false}
-        renderPagination={this.renderPagination}
-        onScroll={Animated.event(
-          [{ x: this.state.parallax }]
-        )}
-      >
-        {pages}
-      </Swiper>
+      <View>
+        {androidPages}
+        <Swiper
+          loop={false}
+          renderPagination={this.renderPagination}
+          onScroll={Animated.event(
+            [{ x: this.state.parallax }]
+          )}
+        >
+          {pages}
+        </Swiper>
+      </View>
     );
   }
 }
