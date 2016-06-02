@@ -7,6 +7,7 @@
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, Alert, Image } from 'react-native';
 import AppIntro from 'react-native-app-intro';
+// import AppIntro from './AppIntro';
 
 const styles = StyleSheet.create({
   slide: {
@@ -59,7 +60,7 @@ class Example extends Component {
     // Alert.alert('Next');
   }
   onSlideChangeHandle = (index, total) => {
-
+    console.log(index, total);
   }
 
   render() {

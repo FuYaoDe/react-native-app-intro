@@ -186,7 +186,6 @@ export default class AppIntro extends Component {
 
   renderPagination = (index, total, context) => {
     const { activeDotColor, dotColor, rightTextColor } = this.props;
-    this.props.onSlideChange(index, total);
     const ActiveDot = (
       <View
         style={[styles.activeDotStyle, { backgroundColor: activeDotColor }]}
@@ -400,6 +399,9 @@ export default class AppIntro extends Component {
         <Swiper
           loop={false}
           renderPagination={this.renderPagination}
+          onMomentumScrollEnd={(e, state) => {
+            this.props.onSlideChange(state.index, state.total);
+          }}
           onScroll={Animated.event(
             [{ x: this.state.parallax }]
           )}
