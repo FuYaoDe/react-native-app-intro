@@ -234,7 +234,7 @@ export default class AppIntro extends Component {
               style={styles.full}
               onPress={isSkipBtnShow ? this.props.onSkipBtnClick : null}
             >
-              <Text style={[styles.controllText, { color: rightTextColor }]}>Skip</Text>
+              <Text style={[styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
             </TouchableOpacity>
           </Animated.View>
           <View style={styles.dotContainer}>
@@ -255,7 +255,7 @@ export default class AppIntro extends Component {
                 <Text style={[styles.controllText, {
                   color: rightTextColor, paddingRight: 30,
                 }]}
-                >Done</Text>
+                >{this.props.doneBtnLabel}</Text>
               </View>
             </Animated.View>
             <Animated.View style={[styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
@@ -281,7 +281,7 @@ export default class AppIntro extends Component {
               style={styles.full}
               onPress={isSkipBtnShow ? this.props.onSkipBtnClick : null}
             >
-              <Text style={[styles.controllText, { color: rightTextColor }]}>Skip</Text>
+              <Text style={[styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.dotContainer}>
@@ -293,7 +293,7 @@ export default class AppIntro extends Component {
                 this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
             >
              <Text style={[styles.nextButtonText, { color: rightTextColor }]}>
-               {isDoneBtnShow ? 'Done' : '›'}
+               {isDoneBtnShow ? this.props.doneBtnLabel : '›'}
              </Text>
             </TouchableOpacity>
           </View>
@@ -421,6 +421,8 @@ AppIntro.propTypes = {
   onDoneBtnClick: PropTypes.func,
   onNextBtnClick: PropTypes.func,
   pageArray: PropTypes.array,
+  doneBtnLabel: PropTypes.string,
+  skipBtnLabel: PropTypes.string,
 };
 
 AppIntro.defaultProps = {
@@ -433,4 +435,6 @@ AppIntro.defaultProps = {
   onSkipBtnClick: () => {},
   onDoneBtnClick: () => {},
   onNextBtnClick: () => {},
+  doneBtnLabel: 'Done',
+  skipBtnLabel: 'Skip',
 };
