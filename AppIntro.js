@@ -132,7 +132,7 @@ export default class AppIntro extends Component {
         },
       });
     }
-    this.props.onNextBtnClick();
+    this.props.onNextBtnClick(context.state.index);
   }
 
   setDoneBtnOpacity = (value) => {
@@ -231,7 +231,7 @@ export default class AppIntro extends Component {
           >
             <TouchableOpacity
               style={styles.full}
-              onPress={isSkipBtnShow ? this.props.onSkipBtnClick : null}
+              onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
             >
               <Text style={[styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
             </TouchableOpacity>
@@ -278,7 +278,7 @@ export default class AppIntro extends Component {
           >
             <TouchableOpacity
               style={styles.full}
-              onPress={isSkipBtnShow ? this.props.onSkipBtnClick : null}
+              onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
             >
               <Text style={[styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
             </TouchableOpacity>
