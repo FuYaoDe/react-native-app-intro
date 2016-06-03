@@ -50,14 +50,16 @@ const styles = StyleSheet.create({
 class Example extends Component {
 
 
-  onSkipBtnHandle = () => {
+  onSkipBtnHandle = (index) => {
     Alert.alert('Skip');
+    console.log(index);
   }
   doneBtnHandle = () => {
     Alert.alert('Done');
   }
-  nextBtnHendle = () => {
-    // Alert.alert('Next');
+  nextBtnHendle = (index) => {
+    Alert.alert('Next');
+    console.log(index);
   }
   onSlideChangeHandle = (index, total) => {
     console.log(index, total);
