@@ -29,14 +29,19 @@ import { AppRegistry, Alert } from 'react-native';
 import AppIntro from 'react-native-app-intro';
 
 class Example extends Component {
-  onSkipBtnHandle = () => {
+  onSkipBtnHandle = (index) => {
     Alert.alert('Skip');
+    console.log(index);
   }
   doneBtnHandle = () => {
     Alert.alert('Done');
   }
-  nextBtnHendle = () => {
+  nextBtnHendle = (index) => {
     Alert.alert('Next');
+    console.log(index);
+  }
+  onSlideChangeHandle = (index, total) => {
+    console.log(index, total);
   }
   render() {
     const pageArray = [{
@@ -161,10 +166,10 @@ And in Android, image inside view component, view need width、height.
 | activeDotColor | string   | '#fff'                  | Active page index dot color                                                                                                                                                                                                                                                                                                                                      |
 | rightTextColor | string   | '#fff'                  | The bottom right Text `Done、>` color                                                                                                                                                                                                                                                                                                                            |
 | leftTextColor  | string   | '#fff'                  | The bottom left Text `Skip` color                                                                                                                                                                                                                                                                                                                                |
-| onSlideChange  | func     |                         | function to call when the pages change                                                                                                                                                                                                                                                                                                                           |
-| onSkipBtnClick | func     |                         | function to call when the Skip button click                                                                                                                                                                                                                                                                                                                      |
+| onSlideChange  | (index, total) => {} |                         | function to call when the pages change                                                                                                                                                                                                                                                                                                                           |
+| onSkipBtnClick | (index) => {}     |                         | function to call when the Skip button click                                                                                                                                                                                                                                                                                                                      |
 | onDoneBtnClick | func     |                         | function to call when the Done button click                                                                                                                                                                                                                                                                                                                      |
-| onNextBtnClick | func     |                         | function to call when the Next '>' button click                                                                                                                                                                                                                                                                                                                  |
+| onNextBtnClick | (index) => {}     |                         | function to call when the Next '>' button click                                                                                                                                                                                                                                                                                                                  |
 | doneBtnLabel   | string   |  Done                   | The bottom right custom Text label                                                                                                                                                                                                                                                                                                                   |
 | skipBtnLabel   | string   |  Skip                   | The bottom left custom Text label                                                                                                                                                                                                                                                                                                                  |
 | pageArray      | array    |                         | In the basic usage, you can input object array to render basic view example: ```[[{title: 'Page 1', description: 'Description 1', img: 'https://goo.gl/uwzs0C', imgStyle: {height: 80 * 2.5, width: 109 * 2.5 }, backgroundColor: '#fa931d', fontColor: '#fff', level: 10 }]``` , level is parallax effect level ,if you use pageArray you can't use custom view |
