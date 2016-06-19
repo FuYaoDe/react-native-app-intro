@@ -1,3 +1,4 @@
+import assign from 'assign-deep';
 import React, { Component, PropTypes } from 'react';
 import {
   StyleSheet,
@@ -13,7 +14,7 @@ import Swiper from 'react-native-swiper';
 const windowsWidth = Dimensions.get('window').width;
 const windowsHeight = Dimensions.get('window').height;
 
-const styles = StyleSheet.create({
+const defaulStyles = {
   header: {
     flex: 0.5,
     justifyContent: 'center',
@@ -103,11 +104,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
+}
 
 export default class AppIntro extends Component {
   constructor(props) {
     super(props);
+
+    this.styles = StyleSheet.create(assign({}, defaulStyles, props.customStyles));
+
     this.state = {
       skipFadeOpacity: new Animated.Value(1),
       doneFadeOpacity: new Animated.Value(0),
@@ -188,10 +192,10 @@ export default class AppIntro extends Component {
     const { activeDotColor, dotColor, rightTextColor } = this.props;
     const ActiveDot = (
       <View
-        style={[styles.activeDotStyle, { backgroundColor: activeDotColor }]}
+        style={[this.styles.activeDotStyle, { backgroundColor: activeDotColor }]}
       />
     );
-    const Dot = <View style={[styles.dotStyle, { backgroundColor: dotColor }]} />;
+    const Dot = <View style={[this.styles.dotStyle, { backgroundColor: dotColor }]} />;
     let dots = [];
     for (let i = 0; i < total; i++) {
       dots.push(i === index ?
@@ -218,8 +222,8 @@ export default class AppIntro extends Component {
     let controllBts;
     if (Platform.OS === 'ios') {
       controllBts =  (
-        <View style={styles.paginationContainer}>
-          <Animated.View style={[styles.btnContainer, {
+        <View style={this.styles.paginationContainer}>
+          <Animated.View style={[this.styles.btnContainer, {
             opacity: this.state.skipFadeOpacity,
             transform: [{
               translateX: this.state.skipFadeOpacity.interpolate({
@@ -230,17 +234,17 @@ export default class AppIntro extends Component {
           }]}
           >
             <TouchableOpacity
-              style={styles.full}
+              style={this.styles.full}
               onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
             >
-              <Text style={[styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
+              <Text style={[this.styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
             </TouchableOpacity>
           </Animated.View>
-          <View style={styles.dotContainer}>
+          <View style={this.styles.dotContainer}>
             {dots}
           </View>
-          <View style={styles.btnContainer}>
-            <Animated.View style={[styles.full, { height: 0 }, {
+          <View style={this.styles.btnContainer}>
+            <Animated.View style={[this.styles.full, { height: 0 }, {
               opacity: this.state.doneFadeOpacity,
               transform: [{
                 translateX: this.state.skipFadeOpacity.interpolate({
@@ -250,19 +254,19 @@ export default class AppIntro extends Component {
               }],
             }]}
             >
-              <View style={styles.full}>
-                <Text style={[styles.controllText, {
+              <View style={this.styles.full}>
+                <Text style={[this.styles.controllText, {
                   color: rightTextColor, paddingRight: 30,
                 }]}
                 >{this.props.doneBtnLabel}</Text>
               </View>
             </Animated.View>
-            <Animated.View style={[styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
-              <TouchableOpacity style={styles.full}
+            <Animated.View style={[this.styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
+              <TouchableOpacity style={this.styles.full}
                 onPress={ isDoneBtnShow ?
                   this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
               >
-               <Text style={[styles.nextButtonText, { color: rightTextColor }]}>›</Text>
+               <Text style={[this.styles.nextButtonText, { color: rightTextColor }]}>›</Text>
               </TouchableOpacity>
             </Animated.View>
           </View>
@@ -270,28 +274,28 @@ export default class AppIntro extends Component {
       );
     } else {
       controllBts = (
-        <View style={styles.paginationContainer}>
-          <View style={[styles.btnContainer, {
+        <View style={this.styles.paginationContainer}>
+          <View style={[this.styles.btnContainer, {
             paddingBottom: 5,
             opacity: isSkipBtnShow ? 1 : 0,
           }]}
           >
             <TouchableOpacity
-              style={styles.full}
+              style={this.styles.full}
               onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
             >
-              <Text style={[styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
+              <Text style={[this.styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.dotContainer}>
+          <View style={this.styles.dotContainer}>
             {dots}
           </View>
-          <View style={[styles.btnContainer, { height: 0, paddingBottom: 5 }]}>
-            <TouchableOpacity style={styles.full}
+          <View style={[this.styles.btnContainer, { height: 0, paddingBottom: 5 }]}>
+            <TouchableOpacity style={this.styles.full}
               onPress={ isDoneBtnShow ?
                 this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
             >
-             <Text style={[styles.nextButtonText, { color: rightTextColor }]}>
+             <Text style={[this.styles.nextButtonText, { color: rightTextColor }]}>
                {isDoneBtnShow ? this.props.doneBtnLabel : '›'}
              </Text>
             </TouchableOpacity>
@@ -315,16 +319,16 @@ export default class AppIntro extends Component {
     const AnimatedStyle2 = this.getTransform(index, 0, level);
     const AnimatedStyle3 = this.getTransform(index, 15, level);
     const pageView = (
-      <View style={[styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
-        <Animated.View style={[styles.header, ...AnimatedStyle1.transform]}>
+      <View style={[this.styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
+        <Animated.View style={[this.styles.header, ...AnimatedStyle1.transform]}>
           <Image style={imgStyle} source={{ uri: img }} />
         </Animated.View>
-        <View style={styles.info}>
+        <View style={this.styles.info}>
           <Animated.View style={AnimatedStyle2.transform}>
-            <Text style={[styles.title, { color: fontColor }]}>{title}</Text>
+            <Text style={[this.styles.title, { color: fontColor }]}>{title}</Text>
           </Animated.View>
           <Animated.View style={AnimatedStyle3.transform}>
-            <Text style={[styles.description, { color: fontColor }]}>{description}</Text>
+            <Text style={[this.styles.description, { color: fontColor }]}>{description}</Text>
           </Animated.View>
         </View>
       </View>
@@ -425,6 +429,7 @@ AppIntro.propTypes = {
   pageArray: PropTypes.array,
   doneBtnLabel: PropTypes.string,
   skipBtnLabel: PropTypes.string,
+  customStyles: PropTypes.object,
 };
 
 AppIntro.defaultProps = {
