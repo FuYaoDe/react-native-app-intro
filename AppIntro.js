@@ -266,7 +266,7 @@ export default class AppIntro extends Component {
                 onPress={ isDoneBtnShow ?
                   this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
               >
-               <Text style={[this.styles.nextButtonText, { color: rightTextColor }]}>›</Text>
+               <Text style={[this.styles.nextButtonText, { color: rightTextColor }]}>{this.props.nextBtnLabel}</Text>
               </TouchableOpacity>
             </Animated.View>
           </View>
@@ -296,7 +296,7 @@ export default class AppIntro extends Component {
                 this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
             >
              <Text style={[this.styles.nextButtonText, { color: rightTextColor }]}>
-               {isDoneBtnShow ? this.props.doneBtnLabel : '›'}
+               {isDoneBtnShow ? this.props.doneBtnLabel : this.props.nextBtnLabel}
              </Text>
             </TouchableOpacity>
           </View>
@@ -427,8 +427,18 @@ AppIntro.propTypes = {
   onDoneBtnClick: PropTypes.func,
   onNextBtnClick: PropTypes.func,
   pageArray: PropTypes.array,
-  doneBtnLabel: PropTypes.string,
-  skipBtnLabel: PropTypes.string,
+  doneBtnLabel: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  skipBtnLabel: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
+  nextBtnLabel: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
   customStyles: PropTypes.object,
 };
 
@@ -444,4 +454,5 @@ AppIntro.defaultProps = {
   onNextBtnClick: () => {},
   doneBtnLabel: 'Done',
   skipBtnLabel: 'Skip',
+  nextBtnLabel: '›',
 };
