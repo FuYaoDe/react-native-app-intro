@@ -402,6 +402,7 @@ export default class AppIntro extends Component {
         {androidPages}
         <Swiper
           loop={false}
+          index={this.props.defaultIndex}
           renderPagination={this.renderPagination}
           onMomentumScrollEnd={(e, state) => {
             this.props.onSlideChange(state.index, state.total);
@@ -440,6 +441,7 @@ AppIntro.propTypes = {
     PropTypes.element,
   ]),
   customStyles: PropTypes.object,
+  defaultIndex: PropTypes.number
 };
 
 AppIntro.defaultProps = {
@@ -455,4 +457,5 @@ AppIntro.defaultProps = {
   doneBtnLabel: 'Done',
   skipBtnLabel: 'Skip',
   nextBtnLabel: '›',
+  defaultIndex: 0
 };
