@@ -247,13 +247,13 @@ export default class AppIntro extends Component {
   }
 
   renderPagination = (index, total, context) => {
-    const { activeDotColor, dotColor, rightTextColor } = this.props;
+    const { dotStyles, activeDotColor, dotColor, rightTextColor } = this.props;
     const ActiveDot = (
       <View
-        style={[this.styles.activeDotStyle, { backgroundColor: activeDotColor }]}
+        style={[this.styles.activeDotStyle, dotStyles, { backgroundColor: activeDotColor }]}
       />
     );
-    const Dot = <View style={[this.styles.dotStyle, { backgroundColor: dotColor }]} />;
+    const Dot = <View style={[this.styles.dotStyle, dotStyles, { backgroundColor: dotColor }]} />;
     let dots = [];
     for (let i = 0; i < total; i++) {
       dots.push(i === index ?
@@ -278,9 +278,10 @@ export default class AppIntro extends Component {
       isSkipBtnShow = true;
     }
     let controllBts;
+    const {paginationStyles} = this.props;
     if (Platform.OS === 'ios') {
       controllBts =  (
-        <View style={this.styles.paginationContainer}>
+        <View style={[this.styles.paginationContainer, paginationStyles]}>
           {this.renderSkipButton()}
           <View style={this.styles.dotContainer}>
             {dots}
@@ -290,7 +291,7 @@ export default class AppIntro extends Component {
       );
     } else {
       controllBts = (
-        <View style={this.styles.paginationContainer}>
+        <View style={[this.styles.paginationContainer, paginationStyles]}>
           <View style={[this.styles.btnContainer, {
             paddingBottom: 5,
             opacity: isSkipBtnShow ? 1 : 0,
@@ -459,7 +460,9 @@ AppIntro.propTypes = {
   customStyles: PropTypes.object,
   defaultIndex: PropTypes.number,
   showSkipButton: PropTypes.bool,
-  showDoneButton: PropTypes.bool
+  showDoneButton: PropTypes.bool,
+  paginationStyles: PropTypes.object,
+  dotStyles: PropTypes.object
 };
 
 AppIntro.defaultProps = {
@@ -477,5 +480,7 @@ AppIntro.defaultProps = {
   nextBtnLabel: '›',
   defaultIndex: 0,
   showSkipButton: true,
-  showDoneButton: true
+  showDoneButton: true,
+  paginationStyles: {},
+  dotStyles: {}
 };
