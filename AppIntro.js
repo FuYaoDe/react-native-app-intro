@@ -188,6 +188,64 @@ export default class AppIntro extends Component {
     };
   }
 
+  renderSkipButton = () => {
+    if (this.props.renderSkipButton) {
+      return (
+        <Animated.View style={[this.styles.btnContainer, {
+          opacity: this.state.skipFadeOpacity,
+          transform: [{
+            translateX: this.state.skipFadeOpacity.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 15],
+            }),
+          }],
+        }]}
+        >
+          <TouchableOpacity
+            style={this.styles.full}
+            onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
+          >
+            <Text style={[this.styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
+          </TouchableOpacity>
+        </Animated.View>
+      )
+    }
+  }
+
+  renderDoneButton = () => {
+    if (this.props.renderDoneButton) {
+      return (
+        <View style={this.styles.btnContainer}>
+          <Animated.View style={[this.styles.full, { height: 0 }, {
+            opacity: this.state.doneFadeOpacity,
+            transform: [{
+              translateX: this.state.skipFadeOpacity.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 20],
+              }),
+            }],
+          }]}
+          >
+            <View style={this.styles.full}>
+              <Text style={[this.styles.controllText, {
+                color: rightTextColor, paddingRight: 30,
+              }]}
+              >{this.props.doneBtnLabel}</Text>
+            </View>
+          </Animated.View>
+          <Animated.View style={[this.styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
+            <TouchableOpacity style={this.styles.full}
+              onPress={ isDoneBtnShow ?
+                this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
+            >
+             <Text style={[this.styles.nextButtonText, { color: rightTextColor }]}>{this.props.nextBtnLabel}</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      )
+    }
+  }
+
   renderPagination = (index, total, context) => {
     const { activeDotColor, dotColor, rightTextColor } = this.props;
     const ActiveDot = (
@@ -223,53 +281,11 @@ export default class AppIntro extends Component {
     if (Platform.OS === 'ios') {
       controllBts =  (
         <View style={this.styles.paginationContainer}>
-          <Animated.View style={[this.styles.btnContainer, {
-            opacity: this.state.skipFadeOpacity,
-            transform: [{
-              translateX: this.state.skipFadeOpacity.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 15],
-              }),
-            }],
-          }]}
-          >
-            <TouchableOpacity
-              style={this.styles.full}
-              onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
-            >
-              <Text style={[this.styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
-            </TouchableOpacity>
-          </Animated.View>
+          {this.renderSkipButton()}
           <View style={this.styles.dotContainer}>
             {dots}
           </View>
-          <View style={this.styles.btnContainer}>
-            <Animated.View style={[this.styles.full, { height: 0 }, {
-              opacity: this.state.doneFadeOpacity,
-              transform: [{
-                translateX: this.state.skipFadeOpacity.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, 20],
-                }),
-              }],
-            }]}
-            >
-              <View style={this.styles.full}>
-                <Text style={[this.styles.controllText, {
-                  color: rightTextColor, paddingRight: 30,
-                }]}
-                >{this.props.doneBtnLabel}</Text>
-              </View>
-            </Animated.View>
-            <Animated.View style={[this.styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
-              <TouchableOpacity style={this.styles.full}
-                onPress={ isDoneBtnShow ?
-                  this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
-              >
-               <Text style={[this.styles.nextButtonText, { color: rightTextColor }]}>{this.props.nextBtnLabel}</Text>
-              </TouchableOpacity>
-            </Animated.View>
-          </View>
+          {this.renderDoneButton()}
         </View>
       );
     } else {
@@ -441,7 +457,9 @@ AppIntro.propTypes = {
     PropTypes.element,
   ]),
   customStyles: PropTypes.object,
-  defaultIndex: PropTypes.number
+  defaultIndex: PropTypes.number,
+  showSkipButton: PropTypes.bool,
+  showDoneButton: PropTypes.bool
 };
 
 AppIntro.defaultProps = {
@@ -457,5 +475,7 @@ AppIntro.defaultProps = {
   doneBtnLabel: 'Done',
   skipBtnLabel: 'Skip',
   nextBtnLabel: '›',
-  defaultIndex: 0
+  defaultIndex: 0,
+  showSkipButton: true,
+  showDoneButton: true
 };
