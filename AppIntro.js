@@ -342,13 +342,7 @@ export default class AppIntro extends Component {
     const root = children.props.children;
     let nodes = children;
     if (Array.isArray(root)) {
-      nodes = root.map((node, i) => {
-        let element = node;
-        if (node.type.displayName === 'View') {
-          element = this.renderChild(node, pageIndex, `${index}_${i}`);
-        }
-        return element;
-      });
+      nodes = root.map((node, i) => this.renderChild(node, pageIndex, `${index}_${i}`));
     }
     let animatedChild = children;
     if (level !== 0) {

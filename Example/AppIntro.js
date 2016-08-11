@@ -189,7 +189,7 @@ export default class AppIntro extends Component {
   }
 
   renderPagination = (index, total, context) => {
-    const { activeDotColor, dotColor, rightTextColor } = this.props;
+    const { activeDotColor, dotColor, rightTextColor, leftTextColor } = this.props;
     const ActiveDot = (
       <View
         style={[this.styles.activeDotStyle, { backgroundColor: activeDotColor }]}
@@ -237,7 +237,7 @@ export default class AppIntro extends Component {
               style={this.styles.full}
               onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
             >
-              <Text style={[this.styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
+              <Text style={[this.styles.controllText, { color: leftTextColor }]}>{this.props.skipBtnLabel}</Text>
             </TouchableOpacity>
           </Animated.View>
           <View style={this.styles.dotContainer}>
@@ -284,7 +284,7 @@ export default class AppIntro extends Component {
               style={this.styles.full}
               onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
             >
-              <Text style={[this.styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
+              <Text style={[this.styles.controllText, { color: leftTextColor }]}>{this.props.skipBtnLabel}</Text>
             </TouchableOpacity>
           </View>
           <View style={this.styles.dotContainer}>
@@ -342,13 +342,7 @@ export default class AppIntro extends Component {
     const root = children.props.children;
     let nodes = children;
     if (Array.isArray(root)) {
-      nodes = root.map((node, i) => {
-        let element = node;
-        if (node.type.displayName === 'View') {
-          element = this.renderChild(node, pageIndex, `${index}_${i}`);
-        }
-        return element;
-      });
+      nodes = root.map((node, i) => this.renderChild(node, pageIndex, `${index}_${i}`));
     }
     let animatedChild = children;
     if (level !== 0) {
