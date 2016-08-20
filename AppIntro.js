@@ -461,6 +461,8 @@ AppIntro.propTypes = {
   defaultIndex: PropTypes.number,
   showSkipButton: PropTypes.bool,
   showDoneButton: PropTypes.bool,
+  renderDoneButton: PropTypes.element,
+  renderSkipButton: PropTypes.element,
   paginationStyles: PropTypes.object,
   dotStyles: PropTypes.object
 };
