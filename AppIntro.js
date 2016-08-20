@@ -247,13 +247,13 @@ export default class AppIntro extends Component {
   }
 
   renderPagination = (index, total, context) => {
-    const { dotStyles, activeDotColor, dotColor, rightTextColor } = this.props;
+    const { activeDotColor, dotColor, rightTextColor, leftTextColor } = this.props;
     const ActiveDot = (
       <View
-        style={[this.styles.activeDotStyle, dotStyles, { backgroundColor: activeDotColor }]}
+        style={[this.styles.activeDotStyle, { backgroundColor: activeDotColor }]}
       />
     );
-    const Dot = <View style={[this.styles.dotStyle, dotStyles, { backgroundColor: dotColor }]} />;
+    const Dot = <View style={[this.styles.dotStyle, { backgroundColor: dotColor }]} />;
     let dots = [];
     for (let i = 0; i < total; i++) {
       dots.push(i === index ?
@@ -301,7 +301,7 @@ export default class AppIntro extends Component {
               style={this.styles.full}
               onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
             >
-              <Text style={[this.styles.controllText, { color: rightTextColor }]}>{this.props.skipBtnLabel}</Text>
+              <Text style={[this.styles.controllText, { color: leftTextColor }]}>{this.props.skipBtnLabel}</Text>
             </TouchableOpacity>
           </View>
           <View style={this.styles.dotContainer}>
@@ -359,13 +359,7 @@ export default class AppIntro extends Component {
     const root = children.props.children;
     let nodes = children;
     if (Array.isArray(root)) {
-      nodes = root.map((node, i) => {
-        let element = node;
-        if (node.type.displayName === 'View') {
-          element = this.renderChild(node, pageIndex, `${index}_${i}`);
-        }
-        return element;
-      });
+      nodes = root.map((node, i) => this.renderChild(node, pageIndex, `${index}_${i}`));
     }
     let animatedChild = children;
     if (level !== 0) {

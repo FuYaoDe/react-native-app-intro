@@ -36,7 +36,7 @@ class Example extends Component {
   doneBtnHandle = () => {
     Alert.alert('Done');
   }
-  nextBtnHendle = (index) => {
+  nextBtnHandle = (index) => {
     Alert.alert('Next');
     console.log(index);
   }
@@ -69,7 +69,7 @@ class Example extends Component {
     }];
     return (
       <AppIntro
-        onNextBtnClick={this.nextBtnHendle}
+        onNextBtnClick={this.nextBtnHandle}
         onDoneBtnClick={this.doneBtnHandle}
         onSkipBtnClick={this.onSkipBtnHandle}
         onSlideChange={this.onSlideChangeHandle}

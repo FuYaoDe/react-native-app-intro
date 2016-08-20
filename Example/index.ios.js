@@ -6,8 +6,8 @@
 
 import React, { Component } from 'react';
 import { AppRegistry, StyleSheet, Text, View, Alert, Image } from 'react-native';
-import AppIntro from 'react-native-app-intro';
-// import AppIntro from './AppIntro';
+// import AppIntro from 'react-native-app-intro';
+import AppIntro from './AppIntro';
 
 const styles = StyleSheet.create({
   slide: {
@@ -57,7 +57,7 @@ class Example extends Component {
   doneBtnHandle = () => {
     Alert.alert('Done');
   }
-  nextBtnHendle = (index) => {
+  nextBtnHandle = (index) => {
     Alert.alert('Next');
     console.log(index);
   }
@@ -68,7 +68,7 @@ class Example extends Component {
   render() {
     return (
       <AppIntro
-        onNextBtnClick={this.nextBtnHendle}
+        onNextBtnClick={this.nextBtnHandle}
         onDoneBtnClick={this.doneBtnHandle}
         onSkipBtnClick={this.onSkipBtnHandle}
         onSlideChange={this.onSlideChangeHandle}
