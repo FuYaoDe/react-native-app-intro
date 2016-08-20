@@ -177,8 +177,6 @@ And in Android, image inside view component, view need width、height.
 | defaultIndex | number   | 0 | number of the index of the initial index |
 | renderSkipButton | bool | true | a boolean defining if we should render the skip button |
 | renderDoneButton | bool | true | a boolean that defines if we should render the done button |
-| paginationStyles | object | {} | an object of custom styling for the pagination container |
-| dotStyles | object | {} | an object of custom styling for the dot pagination |
 
 ##### **Children View Properties**
 | Prop  | PropType | Default Value | Description           |

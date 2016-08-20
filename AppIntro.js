@@ -278,10 +278,9 @@ export default class AppIntro extends Component {
       isSkipBtnShow = true;
     }
     let controllBts;
-    const {paginationStyles} = this.props;
     if (Platform.OS === 'ios') {
       controllBts =  (
-        <View style={[this.styles.paginationContainer, paginationStyles]}>
+        <View style={[this.styles.paginationContainer]}>
           {this.renderSkipButton()}
           <View style={this.styles.dotContainer}>
             {dots}
@@ -291,7 +290,7 @@ export default class AppIntro extends Component {
       );
     } else {
       controllBts = (
-        <View style={[this.styles.paginationContainer, paginationStyles]}>
+        <View style={[this.styles.paginationContainer]}>
           <View style={[this.styles.btnContainer, {
             paddingBottom: 5,
             opacity: isSkipBtnShow ? 1 : 0,
@@ -456,9 +455,7 @@ AppIntro.propTypes = {
   showSkipButton: PropTypes.bool,
   showDoneButton: PropTypes.bool,
   renderDoneButton: PropTypes.element,
-  renderSkipButton: PropTypes.element,
-  paginationStyles: PropTypes.object,
-  dotStyles: PropTypes.object
+  renderSkipButton: PropTypes.element
 };
 
 AppIntro.defaultProps = {
@@ -476,7 +473,5 @@ AppIntro.defaultProps = {
   nextBtnLabel: '›',
   defaultIndex: 0,
   showSkipButton: true,
-  showDoneButton: true,
-  paginationStyles: {},
-  dotStyles: {}
+  showDoneButton: true
 };
