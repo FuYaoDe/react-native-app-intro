@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import DoneButton from './components/DoneButton';
+import SkipButton from './components/SkipButton';
+import RenderDots from './components/Dots';
 
 const windowsWidth = Dimensions.get('window').width;
 const windowsHeight = Dimensions.get('window').height;
@@ -183,75 +185,7 @@ export default class AppIntro extends Component {
     };
   }
 
-  renderSkipButton = (isSkipBtnShow, index) => {
-      if (Platform.OS === 'ios') {
-      return (
-        <Animated.View style={[this.styles.btnContainer, {
-          opacity: this.state.skipFadeOpacity,
-          transform: [{
-            translateX: this.state.skipFadeOpacity.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 15],
-            }),
-          }],
-        }]}
-        >
-          <TouchableOpacity
-            style={this.styles.full}
-            onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
-          >
-            <Text style={[this.styles.controllText, { color: this.props.rightTextColor }]}>{this.props.skipBtnLabel}</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      )
-    } else {
-      return (
-      <View style={[this.styles.btnContainer, {
-          paddingBottom: 5,
-          opacity: isSkipBtnShow ? 1 : 0,
-        }]}
-        >
-          <TouchableOpacity
-            style={this.styles.full}
-            onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
-          >
-            <Text style={[this.styles.controllText, { color: this.props.leftTextColor }]}>{this.props.skipBtnLabel}</Text>
-          </TouchableOpacity>
-        </View>
-    )
-    }
-  }
-
-  renderDots = (dots) => {
-    if (this.props.showDots) {
-      return (
-        <View style={this.styles.dotContainer}>
-          {dots}
-        </View>
-      )
-    }
-  }
-
   renderPagination = (index, total, context) => {
-    const { activeDotColor, dotColor, rightTextColor, leftTextColor } = this.props;
-    const ActiveDot = (
-      <View
-        style={[this.styles.dotStyle, this.styles.activeDotStyle, { backgroundColor: activeDotColor }]}
-      />
-    );
-    const Dot = (
-      <View 
-        style={[this.styles.dotStyle, { backgroundColor: dotColor }]} />
-      );
-
-    let dots = [];
-    for (let i = 0; i < total; i++) {
-      dots.push(i === index ?
-        React.cloneElement(ActiveDot, { key: i })
-        :
-        React.cloneElement(Dot, { key: i })
-      );
-    }
     let isDoneBtnShow;
     let isSkipBtnShow;
     if (index === total - 1) {
@@ -269,8 +203,16 @@ export default class AppIntro extends Component {
     }
     return (
       <View style={[this.styles.paginationContainer]}>
-        {this.props.showSkipButton && this.renderSkipButton(isSkipBtnShow, index)}
-        {this.renderDots(dots)}
+        {this.props.showSkipButton && <SkipButton
+          {...this.props}
+          {...this.state}
+          isSkipBtnShow={isSkipBtnShow}
+          styles={this.styles}
+          onSkipBtnClick={() => this.props.onSkipBtnClick(index)} />}
+        {this.props.showDots && RenderDots(index, total, {
+          ...this.props,
+          styles: this.styles
+        })}
         {this.props.showDoneButton && <DoneButton 
             {...this.props}
             {...this.state}
