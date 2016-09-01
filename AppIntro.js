@@ -203,7 +203,7 @@ export default class AppIntro extends Component {
     }
     return (
       <View style={[this.styles.paginationContainer]}>
-        {this.props.showSkipButton ? <SkipButton
+        {this.props.renderSkipButton ? <SkipButton
           {...this.props}
           {...this.state}
           isSkipBtnShow={isSkipBtnShow}
@@ -215,7 +215,7 @@ export default class AppIntro extends Component {
           ...this.props,
           styles: this.styles
         })}
-        {this.props.showDoneButton ? <DoneButton
+        {this.props.renderDoneButton ? <DoneButton
             {...this.props}
             {...this.state}
             isDoneBtnShow={isDoneBtnShow}
