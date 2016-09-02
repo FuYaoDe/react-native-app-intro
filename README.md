@@ -58,7 +58,7 @@ class Example extends Component {
     }, {
       title: 'Page 2',
       description: 'Description 2',
-      img: 'https://goo.gl/GPO6JB',
+      img: require('../assets/some_image.png'),
       imgStyle: {
         height: 93 * 2.5,
         width: 103 * 2.5,
