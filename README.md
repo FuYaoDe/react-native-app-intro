@@ -175,8 +175,8 @@ And in Android, image inside view component, view need width、height.
 | nextBtnLabel   | string、Text element   |  ›                      | The bottom left custom Text label                                                                                                                                                                                                                                                                                                                  |
 | pageArray      | array    |                         | In the basic usage, you can input object array to render basic view example: ```[[{title: 'Page 1', description: 'Description 1', img: 'https://goo.gl/uwzs0C', imgStyle: {height: 80 * 2.5, width: 109 * 2.5 }, backgroundColor: '#fa931d', fontColor: '#fff', level: 10 }]``` , level is parallax effect level ,if you use pageArray you can't use custom view |
 | defaultIndex | number   | 0 | number of the index of the initial index |
-| renderSkipButton | bool | true | a boolean defining if we should render the skip button |
-| renderDoneButton | bool | true | a boolean that defines if we should render the done button |
+| showSkipButton | bool | true | a boolean defining if we should render the skip button |
+| showDoneButton | bool | true | a boolean that defines if we should render the done button |
 
 ##### **Children View Properties**
 | Prop  | PropType | Default Value | Description           |
