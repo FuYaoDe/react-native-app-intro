@@ -44,10 +44,12 @@ const defaulStyles = {
     color: '#fff',
     fontSize: 30,
     paddingBottom: 20,
+    textAlign: "center",
   },
   description: {
     color: '#fff',
     fontSize: 20,
+    textAlign: "center",
   },
   controllText: {
     color: '#fff',
