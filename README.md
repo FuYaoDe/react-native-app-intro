@@ -47,7 +47,10 @@ class Example extends Component {
     const pageArray = [{
       title: 'Page 1',
       description: 'Description 1',
-      img: 'https://goo.gl/Bnc3XP',
+      image: require('images/logo.png'),
+      titleStyle: {
+        fontSize: 40
+      },
       imgStyle: {
         height: 80 * 2.5,
         width: 109 * 2.5,
@@ -58,7 +61,10 @@ class Example extends Component {
     }, {
       title: 'Page 2',
       description: 'Description 2',
-      img: 'https://goo.gl/GPO6JB',
+      image: {uri: 'https://goo.gl/GPO6JB'},
+      descriptionStyle: {
+        fontWeight: "400"
+      },
       imgStyle: {
         height: 93 * 2.5,
         width: 103 * 2.5,
