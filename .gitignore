@@ -3,9 +3,6 @@ logs
 *.log
 npm-debug.log*
 
-# Flow configuration file
-.flowconfig
-
 # Runtime data
 pids
 *.pid
