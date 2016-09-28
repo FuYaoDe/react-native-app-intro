@@ -244,7 +244,7 @@ export default class AppIntro extends Component {
   }) => {
     let imageSource = image;
     if (img) {
-      imageSource = {uri: img}
+      imageSource = {uri: img};
     }
     const AnimatedStyle1 = this.getTransform(index, 10, level);
     const AnimatedStyle2 = this.getTransform(index, 0, level);
