@@ -233,7 +233,8 @@ export default class AppIntro extends Component {
   renderBasicSlidePage = (index, {
     title,
     description,
-    img,
+    img, // [deprecated] kept for backwards compatibility
+    image,
     imgStyle,
     titleStyle,
     descriptionStyle,
@@ -241,13 +242,17 @@ export default class AppIntro extends Component {
     fontColor,
     level,
   }) => {
+    let imageSource = image;
+    if (img) {
+      imageSource = {uri: img}
+    }
     const AnimatedStyle1 = this.getTransform(index, 10, level);
     const AnimatedStyle2 = this.getTransform(index, 0, level);
     const AnimatedStyle3 = this.getTransform(index, 15, level);
     const pageView = (
       <View style={[this.styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
         <Animated.View style={[this.styles.header, ...AnimatedStyle1.transform]}>
-          <Image style={imgStyle} source={{ uri: img }} />
+          <Image style={imgStyle} source={imageSource} />
         </Animated.View>
         <View style={this.styles.info}>
           <Animated.View style={AnimatedStyle2.transform}>
