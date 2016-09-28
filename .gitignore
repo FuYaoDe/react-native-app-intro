@@ -3,7 +3,7 @@ logs
 *.log
 npm-debug.log*
 
-# Flow configuration files
+# Flow configuration file
 .flowconfig
 
 # Runtime data
