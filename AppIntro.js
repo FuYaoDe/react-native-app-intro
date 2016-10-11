@@ -1,6 +1,7 @@
 import assign from 'assign-deep';
 import React, { Component, PropTypes } from 'react';
 import {
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -240,7 +241,7 @@ export default class AppIntro extends Component {
     const AnimatedStyle1 = this.getTransform(index, 10, level);
     const AnimatedStyle2 = this.getTransform(index, 0, level);
     const AnimatedStyle3 = this.getTransform(index, 15, level);
-    const imgSource = (typeof img === 'string') ? {uri: img} : img; 
+    const imgSource = (typeof img === 'string') ? {uri: img} : img;
     const pageView = (
       <View style={[this.styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
         <Animated.View style={[this.styles.header, ...AnimatedStyle1.transform]}>
@@ -284,6 +285,22 @@ export default class AppIntro extends Component {
     return animatedChild;
   }
 
+  shadeStatusBarColor(color, percent) {
+    const first = parseInt(color.slice(1), 16);
+    const black = first & 0x0000FF;
+    const green = first >> 8 & 0x00FF;
+    const percentage = percent < 0 ? percent * -1 : percent;
+    const red = first >> 16;
+    const theme = percent < 0 ? 0 : 255;
+    const finalColor = (0x1000000 + (Math.round((theme - red) * percentage) + red) * 0x10000 + (Math.round((theme - green) * percentage) + green) * 0x100 + (Math.round((theme - black) * percentage) + black)).toString(16).slice(1);
+
+    return `#${finalColor}`;
+  }
+
+  isToTintStatusBar() {
+    return this.props.pageArray && this.props.pageArray.length > 0 && Platform.OS === 'android'
+  }
+
   render() {
     const childrens = this.props.children;
     const { pageArray } = this.props;
@@ -314,6 +331,11 @@ export default class AppIntro extends Component {
         });
       }
     }
+
+    if (this.isToTintStatusBar()) {
+      StatusBar.setBackgroundColor(this.shadeStatusBarColor(this.props.pageArray[0].backgroundColor, -0.3), false);
+    }
+
     return (
       <View>
         {androidPages}
@@ -322,6 +344,10 @@ export default class AppIntro extends Component {
           index={this.props.defaultIndex}
           renderPagination={this.renderPagination}
           onMomentumScrollEnd={(e, state) => {
+            if (this.isToTintStatusBar()) {
+              StatusBar.setBackgroundColor(this.shadeStatusBarColor(this.props.pageArray[state.index].backgroundColor, -0.3), false);
+            }
+
             this.props.onSlideChange(state.index, state.total);
           }}
           onScroll={Animated.event(
