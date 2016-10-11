@@ -23,7 +23,7 @@ You can use pageArray quick generation your app intro with parallax effect. With
 
 <img src="http://i.giphy.com/l3V0khy22aUviTTaM.gif">
 
-<img src="./assets/sample-android.gif">
+<img src="./assets/sample-android.gif" style="width: 272px;">
 
 ```javascript
 import React, { Component } from 'react';
