@@ -1,6 +1,7 @@
 import assign from 'assign-deep';
 import React, { Component, PropTypes } from 'react';
 import {
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -11,6 +12,10 @@ import {
   Platform,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
+import DoneButton from './components/DoneButton';
+import SkipButton from './components/SkipButton';
+import RenderDots from './components/Dots';
+
 const windowsWidth = Dimensions.get('window').width;
 const windowsHeight = Dimensions.get('window').height;
 
@@ -62,13 +67,6 @@ const defaulStyles = {
   },
   activeDotStyle: {
     backgroundColor: '#fff',
-    width: 13,
-    height: 13,
-    borderRadius: 7,
-    marginLeft: 7,
-    marginRight: 7,
-    marginTop: 7,
-    marginBottom: 7,
   },
   paginationContainer: {
     position: 'absolute',
@@ -189,21 +187,6 @@ export default class AppIntro extends Component {
   }
 
   renderPagination = (index, total, context) => {
-    const { activeDotColor, dotColor, rightTextColor, leftTextColor } = this.props;
-    const ActiveDot = (
-      <View
-        style={[this.styles.activeDotStyle, { backgroundColor: activeDotColor }]}
-      />
-    );
-    const Dot = <View style={[this.styles.dotStyle, { backgroundColor: dotColor }]} />;
-    let dots = [];
-    for (let i = 0; i < total; i++) {
-      dots.push(i === index ?
-        React.cloneElement(ActiveDot, { key: i })
-        :
-        React.cloneElement(Dot, { key: i })
-      );
-    }
     let isDoneBtnShow;
     let isSkipBtnShow;
     if (index === total - 1) {
@@ -219,91 +202,31 @@ export default class AppIntro extends Component {
       isDoneBtnShow = false;
       isSkipBtnShow = true;
     }
-    let controllBts;
-    if (Platform.OS === 'ios') {
-      controllBts =  (
-        <View style={this.styles.paginationContainer}>
-          <Animated.View style={[this.styles.btnContainer, {
-            opacity: this.state.skipFadeOpacity,
-            transform: [{
-              translateX: this.state.skipFadeOpacity.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 15],
-              }),
-            }],
-          }]}
-          >
-            <TouchableOpacity
-              style={this.styles.full}
-              onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
-            >
-              <Text style={[this.styles.controllText, { color: leftTextColor }]}>{this.props.skipBtnLabel}</Text>
-            </TouchableOpacity>
-          </Animated.View>
-          <View style={this.styles.dotContainer}>
-            {dots}
-          </View>
-          <View style={this.styles.btnContainer}>
-            <Animated.View style={[this.styles.full, { height: 0 }, {
-              opacity: this.state.doneFadeOpacity,
-              transform: [{
-                translateX: this.state.skipFadeOpacity.interpolate({
-                  inputRange: [0, 1],
-                  outputRange: [0, 20],
-                }),
-              }],
-            }]}
-            >
-              <View style={this.styles.full}>
-                <Text style={[this.styles.controllText, {
-                  color: rightTextColor, paddingRight: 30,
-                }]}
-                >{this.props.doneBtnLabel}</Text>
-              </View>
-            </Animated.View>
-            <Animated.View style={[this.styles.full, { height: 0 }, { opacity: this.state.nextOpacity }]}>
-              <TouchableOpacity style={this.styles.full}
-                onPress={ isDoneBtnShow ?
-                  this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
-              >
-               <Text style={[this.styles.nextButtonText, { color: rightTextColor }]}>{this.props.nextBtnLabel}</Text>
-              </TouchableOpacity>
-            </Animated.View>
-          </View>
-        </View>
-      );
-    } else {
-      controllBts = (
-        <View style={this.styles.paginationContainer}>
-          <View style={[this.styles.btnContainer, {
-            paddingBottom: 5,
-            opacity: isSkipBtnShow ? 1 : 0,
-          }]}
-          >
-            <TouchableOpacity
-              style={this.styles.full}
-              onPress={isSkipBtnShow ? () => this.props.onSkipBtnClick(index) : null}
-            >
-              <Text style={[this.styles.controllText, { color: leftTextColor }]}>{this.props.skipBtnLabel}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={this.styles.dotContainer}>
-            {dots}
-          </View>
-          <View style={[this.styles.btnContainer, { height: 0, paddingBottom: 5 }]}>
-            <TouchableOpacity style={this.styles.full}
-              onPress={ isDoneBtnShow ?
-                this.props.onDoneBtnClick : this.onNextBtnClick.bind(this, context)}
-            >
-             <Text style={[this.styles.nextButtonText, { color: rightTextColor }]}>
-               {isDoneBtnShow ? this.props.doneBtnLabel : this.props.nextBtnLabel}
-             </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
-    }
-    return controllBts;
+    return (
+      <View style={[this.styles.paginationContainer]}>
+        {this.props.showSkipButton ? <SkipButton
+          {...this.props}
+          {...this.state}
+          isSkipBtnShow={isSkipBtnShow}
+          styles={this.styles}
+          onSkipBtnClick={() => this.props.onSkipBtnClick(index)} /> :
+          <View style={this.styles.btnContainer} />
+        }
+        {this.props.showDots && RenderDots(index, total, {
+          ...this.props,
+          styles: this.styles
+        })}
+        {this.props.showDoneButton ? <DoneButton
+            {...this.props}
+            {...this.state}
+            isDoneBtnShow={isDoneBtnShow}
+            styles={this.styles}
+            onNextBtnClick={this.onNextBtnClick.bind(this, context)}
+            onDoneBtnClick={this.props.onDoneBtnClick} /> :
+            <View style={this.styles.btnContainer} />
+          }
+      </View>
+    );
   }
 
   renderBasicSlidePage = (index, {
@@ -318,10 +241,11 @@ export default class AppIntro extends Component {
     const AnimatedStyle1 = this.getTransform(index, 10, level);
     const AnimatedStyle2 = this.getTransform(index, 0, level);
     const AnimatedStyle3 = this.getTransform(index, 15, level);
+    const imgSource = (typeof img === 'string') ? {uri: img} : img;
     const pageView = (
       <View style={[this.styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
         <Animated.View style={[this.styles.header, ...AnimatedStyle1.transform]}>
-          <Image style={imgStyle} source={{ uri: img }} />
+          <Image style={imgStyle} source={imgSource} />
         </Animated.View>
         <View style={this.styles.info}>
           <Animated.View style={AnimatedStyle2.transform}>
@@ -361,6 +285,22 @@ export default class AppIntro extends Component {
     return animatedChild;
   }
 
+  shadeStatusBarColor(color, percent) {
+    const first = parseInt(color.slice(1), 16);
+    const black = first & 0x0000FF;
+    const green = first >> 8 & 0x00FF;
+    const percentage = percent < 0 ? percent * -1 : percent;
+    const red = first >> 16;
+    const theme = percent < 0 ? 0 : 255;
+    const finalColor = (0x1000000 + (Math.round((theme - red) * percentage) + red) * 0x10000 + (Math.round((theme - green) * percentage) + green) * 0x100 + (Math.round((theme - black) * percentage) + black)).toString(16).slice(1);
+
+    return `#${finalColor}`;
+  }
+
+  isToTintStatusBar() {
+    return this.props.pageArray && this.props.pageArray.length > 0 && Platform.OS === 'android'
+  }
+
   render() {
     const childrens = this.props.children;
     const { pageArray } = this.props;
@@ -391,13 +331,23 @@ export default class AppIntro extends Component {
         });
       }
     }
+
+    if (this.isToTintStatusBar()) {
+      StatusBar.setBackgroundColor(this.shadeStatusBarColor(this.props.pageArray[0].backgroundColor, -0.3), false);
+    }
+
     return (
       <View>
         {androidPages}
         <Swiper
           loop={false}
+          index={this.props.defaultIndex}
           renderPagination={this.renderPagination}
           onMomentumScrollEnd={(e, state) => {
+            if (this.isToTintStatusBar()) {
+              StatusBar.setBackgroundColor(this.shadeStatusBarColor(this.props.pageArray[state.index].backgroundColor, -0.3), false);
+            }
+
             this.props.onSlideChange(state.index, state.total);
           }}
           onScroll={Animated.event(
@@ -434,6 +384,10 @@ AppIntro.propTypes = {
     PropTypes.element,
   ]),
   customStyles: PropTypes.object,
+  defaultIndex: PropTypes.number,
+  showSkipButton: PropTypes.bool,
+  showDoneButton: PropTypes.bool,
+  showDots: PropTypes.bool,
 };
 
 AppIntro.defaultProps = {
@@ -449,4 +403,8 @@ AppIntro.defaultProps = {
   doneBtnLabel: 'Done',
   skipBtnLabel: 'Skip',
   nextBtnLabel: '›',
+  defaultIndex: 0,
+  showSkipButton: true,
+  showDoneButton: true,
+  showDots: true
 };
