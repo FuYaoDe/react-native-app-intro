@@ -7,7 +7,7 @@ react-native-app-intro is a react native component implementing a parallax effec
 
 ### Support ios、android
 <img src="http://i.giphy.com/3o6ozjLoOnYTXfzJgQ.gif">
-<img src="http://gifyu.com/images/android.gif">
+<img src="http://gifyu.com/images/android.gif" width="345">
 
 <a href="http://www.freepik.com">Designed by Freepik</a>
 
@@ -22,8 +22,7 @@ $ npm i react-native-app-intro --save
 You can use pageArray quick generation your app intro with parallax effect. With the basic usage, the Android status bar will be updated to match your slide background color.
 
 <img src="http://i.giphy.com/l3V0khy22aUviTTaM.gif">
-
-<img src="./assets/sample-android.gif" style="width: 272px;">
+<img src="./assets/sample-android.gif" width="280">
 
 ```javascript
 import React, { Component } from 'react';
