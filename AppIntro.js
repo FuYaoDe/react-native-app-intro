@@ -108,6 +108,7 @@ export default class AppIntro extends Component {
   constructor(props) {
     super(props);
 
+    this.isScrolling = false;
     this.styles = StyleSheet.create(assign({}, defaulStyles, props.customStyles));
 
     this.state = {
@@ -119,6 +120,12 @@ export default class AppIntro extends Component {
   }
 
   onNextBtnClick = (context) => {
+    if (this.isScrolling) {
+      return;
+    }
+
+    this.isScrolling = true;
+
     if (context.state.isScrolling || context.state.total < 2) return;
     const state = context.state;
     const diff = (context.props.loop ? 1 : 0) + 1 + context.state.index;
@@ -135,6 +142,16 @@ export default class AppIntro extends Component {
       });
     }
     this.props.onNextBtnClick(context.state.index);
+  }
+
+  onLayout (e) {
+    this.width = e.nativeEvent.layout.width;
+  }
+
+  onScroll (e) {
+    if (0 === e.x % this.width) {
+      this.isScrolling = false;
+    }
   }
 
   setDoneBtnOpacity = (value) => {
@@ -337,7 +354,7 @@ export default class AppIntro extends Component {
     }
 
     return (
-      <View>
+      <View onLayout={this.onLayout.bind(this)}>
         {androidPages}
         <Swiper
           loop={false}
@@ -351,7 +368,8 @@ export default class AppIntro extends Component {
             this.props.onSlideChange(state.index, state.total);
           }}
           onScroll={Animated.event(
-            [{ x: this.state.parallax }]
+            [{ x: this.state.parallax }],
+            { listener: this.onScroll.bind(this) },
           )}
         >
           {pages}
