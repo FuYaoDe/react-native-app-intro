@@ -10,7 +10,8 @@ export const DoneButton = ({
   styles, onDoneBtnClick, onNextBtnClick,
   rightTextColor, isDoneBtnShow,
   doneBtnLabel, nextBtnLabel,
-  doneFadeOpacity, skipFadeOpacity, nextOpacity
+  doneFadeOpacity, skipFadeOpacity, nextOpacity,
+  allowFontScaling, fontSize
 }) => {
   return (
     <View style={styles.btnContainer}>
@@ -25,8 +26,8 @@ export const DoneButton = ({
       }]}
       >
         <View style={styles.full}>
-          <Text style={[styles.controllText, {
-            color: rightTextColor, paddingRight: 30,
+          <Text allowFontScaling={allowFontScaling} style={[styles.controllText, {
+            color: rightTextColor, paddingRight: 30, fontSize
           }]}>
             {doneBtnLabel}
           </Text>
@@ -35,7 +36,7 @@ export const DoneButton = ({
       <Animated.View style={[styles.full, { height: 0 }, { opacity: nextOpacity }]}>
         <TouchableOpacity style={styles.full}
           onPress={ isDoneBtnShow ? onDoneBtnClick : onNextBtnClick}>
-         <Text style={[styles.nextButtonText, { color: rightTextColor }]}>
+         <Text allowFontScaling={allowFontScaling} style={[styles.nextButtonText, { color: rightTextColor, fontSize }]}>
           {nextBtnLabel}
         </Text>
         </TouchableOpacity>
@@ -45,4 +46,3 @@ export const DoneButton = ({
 }
 
 export default DoneButton
-        
