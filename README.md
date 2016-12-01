@@ -180,6 +180,9 @@ And in Android, image inside view component, view need width、height.
 | showDoneButton | bool | true | a boolean that defines if we should render the done button |
 | showDots | bool | true | a boolean that defines if we should render the bottom dots |
 
+| allowFontScaling | bool | true | a boolean that defines if we should allow font scaling on devices with larger text sizes enabled |
+| fontSize | number | 22 | a number that specifies the size of the Skip, Done, and Next labels |
+
 ##### **Children View Properties**
 | Prop  | PropType | Default Value | Description           |
 |-------|----------|---------------|-----------------------|
