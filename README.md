@@ -179,7 +179,6 @@ And in Android, image inside view component, view need width、height.
 | showSkipButton | bool | true | a boolean defining if we should render the skip button |
 | showDoneButton | bool | true | a boolean that defines if we should render the done button |
 | showDots | bool | true | a boolean that defines if we should render the bottom dots |
-
 | allowFontScaling | bool | true | a boolean that defines if we should allow font scaling on devices with larger text sizes enabled |
 | fontSize | number | 22 | a number that specifies the size of the Skip, Done, and Next labels |
 
