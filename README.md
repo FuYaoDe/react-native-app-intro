@@ -54,6 +54,7 @@ class Example extends Component {
         width: 109 * 2.5,
       },
       backgroundColor: '#fa931d',
+      statusBarColor: '#fa931d', // If you don't specify, a 30% darker color will be inferred from your background color.
       fontColor: '#fff',
       level: 10,
     }, {
