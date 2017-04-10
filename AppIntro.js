@@ -309,7 +309,6 @@ export default class AppIntro extends Component {
     if (pageArray.length > 0) {
       pages = pageArray.map((page, i) => this.renderBasicSlidePage(i, page));
     } else {
-      #https://github.com/FuYaoDe/react-native-app-intro/issues/58
       pages = childrens.map((children, i) => this.renderChild(children, i, i));
     }
 
