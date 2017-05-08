@@ -99,8 +99,6 @@ const defaulStyles = {
   full: {
     height: 80,
     width: 100,
-    borderWidth: 2,
-    borderColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
   },
