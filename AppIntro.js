@@ -94,7 +94,7 @@ const defaulStyles = {
   nextButtonText: {
     fontSize: 25,
     fontWeight: 'bold',
-    fontFamily: 'Arial',
+    //fontFamily: 'Arial',
   },
   full: {
     height: 80,
