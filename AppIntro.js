@@ -80,13 +80,13 @@ const defaulStyles = {
     backgroundColor: 'transparent',
   },
   dotContainer: {
-    flex: 0.6,
+    flex: 6,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   btnContainer: {
-    flex: 0.2,
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,
