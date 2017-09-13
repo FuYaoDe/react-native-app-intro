@@ -260,13 +260,13 @@ export default class AppIntro extends Component {
     return pageView;
   }
 
-  renderChild = (children, pageIndex, index) => {
+  renderChild = (children, pageIndex, index, isSubChild = false) => {
     const level = children.props.level || 0;
     const { transform } = this.getTransform(pageIndex, 10, level);
     const root = children.props.children;
     let nodes = children;
     if (Array.isArray(root)) {
-      nodes = root.map((node, i) => this.renderChild(node, pageIndex, `${index}_${i}`));
+      nodes = root.map((node, i) => this.renderChild(node, pageIndex, `${index}_${i}`, true));
     }
     let animatedChild = children;
     if (level !== 0) {
@@ -277,7 +277,7 @@ export default class AppIntro extends Component {
       );
     } else {
       animatedChild = (
-        <View key={index} style={children.props.style}>
+        <View key={index} { ...(!isSubChild ? { style: children.props.style } : {}) }>
           {nodes}
         </View>
       );
