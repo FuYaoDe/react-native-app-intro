@@ -34,7 +34,11 @@ export const RenderDots = (index, total, props) => {
       active: i === index
     }));
   }
-  return dots;
+  return (
+    <View style={props.styles.dotContainer}>
+      {dots}
+    </View>
+  );
 }
 
 export default RenderDots;
