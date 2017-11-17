@@ -102,6 +102,9 @@ const defaulStyles = {
     justifyContent: 'center',
     alignItems: 'center',
   },
+  arrow: {
+    fontSize: 27,
+  },
 }
 
 export default class AppIntro extends Component {
