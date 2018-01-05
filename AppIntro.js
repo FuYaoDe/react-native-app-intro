@@ -75,7 +75,7 @@ const defaulStyles = {
     right: 0,
     flexDirection: 'row',
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
@@ -212,10 +212,12 @@ export default class AppIntro extends Component {
           onSkipBtnClick={() => this.props.onSkipBtnClick(index)} /> :
           <View style={this.styles.btnContainer} />
         }
-        {this.props.showDots && RenderDots(index, total, {
-          ...this.props,
-          styles: this.styles
-        })}
+        <View style={this.styles.dotContainer}>
+          {this.props.showDots && RenderDots(index, total, {
+            ...this.props,
+            styles: this.styles
+          })}
+        </View>
         {this.props.showDoneButton ? <DoneButton
             {...this.props}
             {...this.state}
