@@ -157,7 +157,7 @@ export default class AppIntro extends Component {
       { toValue: value },
     ).start();
   }
-  getTransform = (index, offset, level) => {
+  getTransform = (index, offset, level=0) => {
     const isFirstPage = index === 0;
     const statRange = isFirstPage ? 0 : windowsWidth * (index - 1);
     const endRange = isFirstPage ? windowsWidth : windowsWidth * index;
