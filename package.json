@@ -29,6 +29,6 @@
   "dependencies": {
     "assign-deep": "^0.4.5",
     "prop-types": "^15.6.1",
-    "react-native-swiper": "git+https://github.com/FuYaoDe/react-native-swiper.git"
+    "react-native-swiper": "^1.5.13"
   }
 }
