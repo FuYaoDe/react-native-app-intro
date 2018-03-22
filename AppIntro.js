@@ -81,16 +81,16 @@ const defaulStyles = {
     backgroundColor: 'transparent',
   },
   dotContainer: {
-    flex: 0.6,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   btnContainer: {
-    flex: 0.2,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 50,
+    height: 50
   },
   nextButtonText: {
     fontSize: 25,
@@ -119,23 +119,10 @@ export default class AppIntro extends Component {
     };
   }
 
-  onNextBtnClick = (context) => {
-    if (context.state.isScrolling || context.state.total < 2) return;
-    const state = context.state;
-    const diff = (context.props.loop ? 1 : 0) + 1 + context.state.index;
-    let x = 0;
-    if (state.dir === 'x') x = diff * state.width;
-    if (Platform.OS === 'ios') {
-      context.refs.scrollView.scrollTo({ y: 0, x });
-    } else {
-      context.refs.scrollView.setPage(diff);
-      context.onScrollEnd({
-        nativeEvent: {
-          position: diff,
-        },
-      });
-    }
-    this.props.onNextBtnClick(context.state.index);
+  onNextBtnClick = (swiper) => {
+    // scrollTo really means scroll forward some offset
+    swiper.scrollTo(1);
+    this.props.onNextBtnClick(swiper.state.index);
   }
 
   setDoneBtnOpacity = (value) => {
@@ -187,10 +174,10 @@ export default class AppIntro extends Component {
     };
   }
 
-  renderPagination = (index, total, context) => {
+  renderPagination = (index, total, swiper) => {
     let isDoneBtnShow;
     let isSkipBtnShow;
-    if (index === total - 1) {
+    if (index >= total - 1) {
       this.setDoneBtnOpacity(1);
       this.setSkipBtnOpacity(0);
       this.setNextOpacity(0);
@@ -222,7 +209,7 @@ export default class AppIntro extends Component {
             {...this.state}
             isDoneBtnShow={isDoneBtnShow}
             styles={this.styles}
-            onNextBtnClick={this.onNextBtnClick.bind(this, context)}
+            onNextBtnClick={this.onNextBtnClick.bind(this, swiper)}
             onDoneBtnClick={this.props.onDoneBtnClick} /> :
             <View style={this.styles.btnContainer} />
           }
@@ -310,9 +297,7 @@ export default class AppIntro extends Component {
     if (pageArray.length > 0) {
       pages = pageArray.map((page, i) => this.renderBasicSlidePage(i, page));
     } else {
-      if (Platform.OS === 'ios') {
-        pages = childrens.map((children, i) => this.renderChild(children, i, i));
-      } else {
+      if (Platform.OS === 'android') {
         androidPages = childrens.map((children, i) => {
           const { transform } = this.getTransform(i, -windowsWidth / 3 * 2, 1);
           pages.push(<View key={i} />);
@@ -330,6 +315,8 @@ export default class AppIntro extends Component {
             </Animated.View>
           );
         });
+      } else {
+        pages = childrens.map((children, i) => this.renderChild(children, i, i));
       }
     }
 
