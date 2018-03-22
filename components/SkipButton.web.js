@@ -1,1 +1,2 @@
-module.exports = require('./SkipButton.ios')
+import SkipButton from './SkipButton.ios'
+export default SkipButton
