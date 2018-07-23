@@ -19,8 +19,8 @@ import RenderDots from './components/Dots';
 
 const windowsWidth = Dimensions.get('window').width;
 const windowsHeight = Dimensions.get('window').height;
-
-const defaulStyles = {
+const getPageBackgroundColor = page => page.backgroundColor || defaultStyles.slide.backgroundColor
+const defaultStyles = {
   header: {
     flex: 0.5,
     justifyContent: 'center',
@@ -109,7 +109,7 @@ export default class AppIntro extends Component {
   constructor(props) {
     super(props);
 
-    this.styles = StyleSheet.create(assign({}, defaulStyles, props.customStyles));
+    this.styles = StyleSheet.create(assign({}, defaultStyles, props.customStyles));
 
     this.state = {
       skipFadeOpacity: new Animated.Value(1),
@@ -321,7 +321,7 @@ export default class AppIntro extends Component {
     }
 
     if (this.isToTintStatusBar()) {
-      StatusBar.setBackgroundColor(this.shadeStatusBarColor(this.props.pageArray[0].backgroundColor, -0.3), false);
+      StatusBar.setBackgroundColor(this.shadeStatusBarColor(getPageBackgroundColor(this.props.pageArray[0]), -0.3), false);
     }
 
     return (
@@ -333,7 +333,7 @@ export default class AppIntro extends Component {
           renderPagination={this.renderPagination}
           onMomentumScrollEnd={(e, state) => {
             if (this.isToTintStatusBar()) {
-              StatusBar.setBackgroundColor(this.shadeStatusBarColor(this.props.pageArray[state.index].backgroundColor, -0.3), false);
+              StatusBar.setBackgroundColor(this.shadeStatusBarColor(getPageBackgroundColor(this.props.pageArray[state.index]), -0.3), false);
             }
 
             this.props.onSlideChange(state.index, state.total);
