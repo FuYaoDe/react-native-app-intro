@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/fuyaode/react-native-app-intro#readme",
   "dependencies": {
-    "assign-deep": "^0.4.6",
+    "assign-deep": "^0.4.5",
     "prop-types": "^15.6.0",
     "react-native-swiper": "^1.5.13",
   }
