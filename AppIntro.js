@@ -1,5 +1,6 @@
 import assign from 'assign-deep';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   StatusBar,
   StyleSheet,
@@ -43,16 +44,16 @@ const defaulStyles = {
   },
   title: {
     color: '#fff',
-    fontSize: 30,
+    fontSize: 26,
     paddingBottom: 20,
   },
   description: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 16,
   },
   controllText: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: 16,
     fontWeight: 'bold',
   },
   dotStyle: {
@@ -86,15 +87,16 @@ const defaulStyles = {
     alignItems: 'center',
   },
   btnContainer: {
-    flex: 0.2,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,
   },
   nextButtonText: {
-    fontSize: 25,
+    fontSize: 18,
     fontWeight: 'bold',
     fontFamily: 'Arial',
+    alignSelf: 'flex-end'
   },
   full: {
     height: 80,
