@@ -330,6 +330,7 @@ export default class AppIntro extends Component {
         <Swiper
           loop={false}
           index={this.props.defaultIndex}
+          component={this.props.component}
           renderPagination={this.renderPagination}
           onMomentumScrollEnd={(e, state) => {
             if (this.isToTintStatusBar()) {
