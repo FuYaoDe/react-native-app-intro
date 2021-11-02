@@ -1,6 +1,6 @@
 import assign from 'assign-deep';
 import React, { Component } from 'react';
-import LinearGradient from 'react-native-web-linear-gradient'
+import LinearGradient from 'react-native-linear-gradient'
 import PropTypes from 'prop-types';
 import {
   StatusBar,

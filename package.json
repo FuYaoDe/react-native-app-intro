@@ -31,5 +31,8 @@
     "prop-types": "^15.5",
     "react-native-swiper": "github:tradle/react-native-swiper#dev",
     "react-native-web-linear-gradient": "^1.1.2"
+  },
+  "browser": {
+    "react-native-linear-gradient": "./web/shims/LinearGradient"
   }
 }
