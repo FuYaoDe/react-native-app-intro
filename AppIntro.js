@@ -1,5 +1,6 @@
 import assign from 'assign-deep';
 import React, { Component } from 'react';
+import LinearGradient from 'react-native-web-linear-gradient'
 import PropTypes from 'prop-types';
 import {
   StatusBar,
@@ -19,8 +20,8 @@ import RenderDots from './components/Dots';
 
 const windowsWidth = Dimensions.get('window').width;
 const windowsHeight = Dimensions.get('window').height;
-const getPageBackgroundColor = page => page.backgroundColor || defaultStyles.slide.backgroundColor
-const defaultStyles = {
+
+const defaulStyles = {
   header: {
     flex: 0.5,
     justifyContent: 'center',
@@ -42,10 +43,18 @@ const defaultStyles = {
     backgroundColor: '#9DD6EB',
     padding: 15,
   },
+  noBgSlide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#9DD6EB',
+    padding: 15,
+  },
   title: {
     color: '#fff',
     fontSize: 30,
     paddingBottom: 20,
+    paddingTop: 10,
   },
   description: {
     color: '#fff',
@@ -109,7 +118,7 @@ export default class AppIntro extends Component {
   constructor(props) {
     super(props);
 
-    this.styles = StyleSheet.create(assign({}, defaultStyles, props.customStyles));
+    this.styles = StyleSheet.create(assign({}, defaulStyles, props.customStyles));
 
     this.state = {
       skipFadeOpacity: new Animated.Value(1),
@@ -230,7 +239,27 @@ export default class AppIntro extends Component {
     const AnimatedStyle2 = this.getTransform(index, 0, level);
     const AnimatedStyle3 = this.getTransform(index, 15, level);
     const imgSource = (typeof img === 'string') ? {uri: img} : img;
-    const pageView = (
+    let colors = backgroundColor.split(',')
+    let pageView
+    if (colors.length > 1) {
+      pageView = (
+        <LinearGradient colors={colors} style={this.styles.noBgSlide}>
+        <Animated.View style={[this.styles.header, ...AnimatedStyle1.transform]}>
+          <Image style={imgStyle} source={imgSource} />
+        </Animated.View>
+        <View style={this.styles.info}>
+          <Animated.View style={AnimatedStyle2.transform}>
+            <Text style={[this.styles.title, { color: fontColor }]}>{title}</Text>
+          </Animated.View>
+          <Animated.View style={AnimatedStyle3.transform}>
+            <Text style={[this.styles.description, { color: fontColor }]}>{description}</Text>
+          </Animated.View>
+        </View>
+        </LinearGradient>
+      )
+    }
+    else
+      pageView = (
       <View style={[this.styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
         <Animated.View style={[this.styles.header, ...AnimatedStyle1.transform]}>
           <Image style={imgStyle} source={imgSource} />
@@ -244,7 +273,7 @@ export default class AppIntro extends Component {
           </Animated.View>
         </View>
       </View>
-    );
+    )
     return pageView;
   }
 
@@ -321,7 +350,7 @@ export default class AppIntro extends Component {
     }
 
     if (this.isToTintStatusBar()) {
-      StatusBar.setBackgroundColor(this.shadeStatusBarColor(getPageBackgroundColor(this.props.pageArray[0]), -0.3), false);
+      StatusBar.setBackgroundColor(this.shadeStatusBarColor(this.props.pageArray[0].backgroundColor, -0.3), false);
     }
 
     return (
@@ -330,11 +359,10 @@ export default class AppIntro extends Component {
         <Swiper
           loop={false}
           index={this.props.defaultIndex}
-          component={this.props.component}
           renderPagination={this.renderPagination}
           onMomentumScrollEnd={(e, state) => {
             if (this.isToTintStatusBar()) {
-              StatusBar.setBackgroundColor(this.shadeStatusBarColor(getPageBackgroundColor(this.props.pageArray[state.index]), -0.3), false);
+              StatusBar.setBackgroundColor(this.shadeStatusBarColor(this.props.pageArray[state.index].backgroundColor, -0.3), false);
             }
 
             this.props.onSlideChange(state.index, state.total);
