@@ -1,5 +1,7 @@
 import assign from 'assign-deep';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import LinearGradient from 'react-native-linear-gradient'
+import PropTypes from 'prop-types';
 import {
   StatusBar,
   StyleSheet,
@@ -41,10 +43,18 @@ const defaulStyles = {
     backgroundColor: '#9DD6EB',
     padding: 15,
   },
+  noBgSlide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#9DD6EB',
+    padding: 15,
+  },
   title: {
     color: '#fff',
     fontSize: 30,
     paddingBottom: 20,
+    paddingTop: 10,
   },
   description: {
     color: '#fff',
@@ -80,16 +90,16 @@ const defaulStyles = {
     backgroundColor: 'transparent',
   },
   dotContainer: {
-    flex: 0.6,
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
   btnContainer: {
-    flex: 0.2,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 50,
+    height: 50
   },
   nextButtonText: {
     fontSize: 25,
@@ -118,23 +128,10 @@ export default class AppIntro extends Component {
     };
   }
 
-  onNextBtnClick = (context) => {
-    if (context.state.isScrolling || context.state.total < 2) return;
-    const state = context.state;
-    const diff = (context.props.loop ? 1 : 0) + 1 + context.state.index;
-    let x = 0;
-    if (state.dir === 'x') x = diff * state.width;
-    if (Platform.OS === 'ios') {
-      context.refs.scrollView.scrollTo({ y: 0, x });
-    } else {
-      context.refs.scrollView.setPage(diff);
-      context.onScrollEnd({
-        nativeEvent: {
-          position: diff,
-        },
-      });
-    }
-    this.props.onNextBtnClick(context.state.index);
+  onNextBtnClick = (swiper) => {
+    // scrollTo really means scroll forward some offset
+    swiper.scrollTo(1);
+    this.props.onNextBtnClick(swiper.state.index);
   }
 
   setDoneBtnOpacity = (value) => {
@@ -157,7 +154,7 @@ export default class AppIntro extends Component {
       { toValue: value },
     ).start();
   }
-  getTransform = (index, offset, level) => {
+  getTransform = (index, offset, level=0) => {
     const isFirstPage = index === 0;
     const statRange = isFirstPage ? 0 : windowsWidth * (index - 1);
     const endRange = isFirstPage ? windowsWidth : windowsWidth * index;
@@ -186,10 +183,10 @@ export default class AppIntro extends Component {
     };
   }
 
-  renderPagination = (index, total, context) => {
+  renderPagination = (index, total, swiper) => {
     let isDoneBtnShow;
     let isSkipBtnShow;
-    if (index === total - 1) {
+    if (index >= total - 1) {
       this.setDoneBtnOpacity(1);
       this.setSkipBtnOpacity(0);
       this.setNextOpacity(0);
@@ -221,7 +218,7 @@ export default class AppIntro extends Component {
             {...this.state}
             isDoneBtnShow={isDoneBtnShow}
             styles={this.styles}
-            onNextBtnClick={this.onNextBtnClick.bind(this, context)}
+            onNextBtnClick={this.onNextBtnClick.bind(this, swiper)}
             onDoneBtnClick={this.props.onDoneBtnClick} /> :
             <View style={this.styles.btnContainer} />
           }
@@ -242,7 +239,27 @@ export default class AppIntro extends Component {
     const AnimatedStyle2 = this.getTransform(index, 0, level);
     const AnimatedStyle3 = this.getTransform(index, 15, level);
     const imgSource = (typeof img === 'string') ? {uri: img} : img;
-    const pageView = (
+    let colors = backgroundColor.split(',')
+    let pageView
+    if (colors.length > 1) {
+      pageView = (
+        <LinearGradient colors={colors} style={this.styles.noBgSlide}>
+        <Animated.View style={[this.styles.header, ...AnimatedStyle1.transform]}>
+          <Image style={imgStyle} source={imgSource} />
+        </Animated.View>
+        <View style={this.styles.info}>
+          <Animated.View style={AnimatedStyle2.transform}>
+            <Text style={[this.styles.title, { color: fontColor }]}>{title}</Text>
+          </Animated.View>
+          <Animated.View style={AnimatedStyle3.transform}>
+            <Text style={[this.styles.description, { color: fontColor }]}>{description}</Text>
+          </Animated.View>
+        </View>
+        </LinearGradient>
+      )
+    }
+    else
+      pageView = (
       <View style={[this.styles.slide, { backgroundColor }]} showsPagination={false} key={index}>
         <Animated.View style={[this.styles.header, ...AnimatedStyle1.transform]}>
           <Image style={imgStyle} source={imgSource} />
@@ -256,7 +273,7 @@ export default class AppIntro extends Component {
           </Animated.View>
         </View>
       </View>
-    );
+    )
     return pageView;
   }
 
@@ -309,9 +326,7 @@ export default class AppIntro extends Component {
     if (pageArray.length > 0) {
       pages = pageArray.map((page, i) => this.renderBasicSlidePage(i, page));
     } else {
-      if (Platform.OS === 'ios') {
-        pages = childrens.map((children, i) => this.renderChild(children, i, i));
-      } else {
+      if (Platform.OS === 'android') {
         androidPages = childrens.map((children, i) => {
           const { transform } = this.getTransform(i, -windowsWidth / 3 * 2, 1);
           pages.push(<View key={i} />);
@@ -329,6 +344,8 @@ export default class AppIntro extends Component {
             </Animated.View>
           );
         });
+      } else {
+        pages = childrens.map((children, i) => this.renderChild(children, i, i));
       }
     }
 

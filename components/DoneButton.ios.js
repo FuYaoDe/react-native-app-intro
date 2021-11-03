@@ -26,7 +26,7 @@ export const DoneButton = ({
       >
         <View style={styles.full}>
           <Text style={[styles.controllText, {
-            color: rightTextColor, paddingRight: 30,
+            color: rightTextColor
           }]}>
             {doneBtnLabel}
           </Text>
@@ -36,7 +36,7 @@ export const DoneButton = ({
         <TouchableOpacity style={styles.full}
           onPress={ isDoneBtnShow ? onDoneBtnClick : onNextBtnClick}>
          <Text style={[styles.nextButtonText, { color: rightTextColor }]}>
-          {nextBtnLabel}
+          {isDoneBtnShow ? doneBtnLabel : nextBtnLabel}
         </Text>
         </TouchableOpacity>
       </Animated.View>
@@ -45,4 +45,3 @@ export const DoneButton = ({
 }
 
 export default DoneButton
-        
